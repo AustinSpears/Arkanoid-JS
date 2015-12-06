@@ -14,6 +14,19 @@ var requestAnimFrame =
 			window.setTimeout(callback, 1000/60);
 	    };
 
+// Objects
+mouse = {};
+
+// Add mousemove and mousedown events to the canvas
+canvas.addEventListener("mousemove", trackMouse, true);
+
+// Declare events
+function trackMouse(e)
+{
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
+}
+
 // Declare classes
 function Paddle()
 {
@@ -35,6 +48,8 @@ function Ball()
     this.color = "white";
     this.x = canvas.width / 2 - this.r;
     this.y = canvas.height / 2 - this.r;
+    this.dx = 0;
+    this.dy = 4;
     
     this.Draw = function Draw()
     {
@@ -68,14 +83,32 @@ function update()
     //ctx.canvas.height = window.innerHeight;
     
     // Set up static objects
-    drawWalls();
+    drawStatic();
     
-    // Draw the ball and paddle
+    // Move the paddle and ball
+    if(mouse.x && mouse.y)
+    {
+        playerPaddle.x = mouse.x - playerPaddle.w/2;
+    }
+    
+    // Draw the paddle and ball
     playerPaddle.Draw();
     mainBall.Draw();
     	
 	// Recursive Step
 	requestAnimFrame(update);
+}
+
+function drawStatic()
+{
+    drawCanvas();
+    drawWalls();
+}
+
+function drawCanvas()
+{
+    ctx.fillStyle = "black";
+    ctx.fillRect(0,0, window.innerWidth, window.innerHeight);
 }
 
 function drawWalls()
