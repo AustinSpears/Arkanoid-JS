@@ -1,9 +1,12 @@
-body { background: lightblue;
+body 
+{ 
+	background: gray;
 }
 
-canvas {
+canvas 
+{
 	display: block;
-	background: #FFFFFF;
-	margin: 0 auto;
+	background: black;
+	margin: 0px;
 }
 	

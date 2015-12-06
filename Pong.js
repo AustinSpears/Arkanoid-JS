@@ -1,6 +1,6 @@
 // Get the canvas
 var canvas = document.getElementById("canvas");
-var context = canvas.getContext("2d");
+var ctx = canvas.getContext("2d");
 
 // Get the animation frame
 var requestAnimFrame = 
@@ -14,24 +14,79 @@ var requestAnimFrame =
 			window.setTimeout(callback, 1000/60);
 	    };
 
-// Start the game
+// Declare classes
+function Paddle()
+{
+    this.h = 8;
+    this.w = canvas.width / 8;
+    this.color = "white";
+    this.x = canvas.width / 2 - this.w/2;
+    this.y = canvas.height - this.h - 2;
+    
+    this.Draw = function Draw()
+    {
+        ctx.fillRect(this.x, this.y, this.w, this.h, this.color);
+    };
+};
+
+function Ball()
+{
+    this.r = 5;
+    this.color = "white";
+    this.x = canvas.width / 2 - this.r;
+    this.y = canvas.height / 2 - this.r;
+    
+    this.Draw = function Draw()
+    {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+        ctx.fill();
+    };
+};
+
+// Declare game objects
+var playerPaddle = new Paddle();
+var mainBall = new Ball();
+
+
+// Start the game!
 init();
 
-// Declare Functions
+
+// Declare functions
 function init()
-{
+{  
+    // Start frame loop
 	requestAnimFrame(update);
 }
 
 function update()
-{
-	// Establish walls
-	context.fillRect(10,10,40,380, "#000000");
-	context.fillRect(10,10,380,40, "#000000");
-	context.fillRect(10,350,380,40, "#000000");
-	context.fillRect(180,10,40,180, "#000000");
-	
+{  
+    // Keep canvas size up to date - todo scaling
+    //ctx.canvas.width = window.innerWidth;
+    //ctx.canvas.height = window.innerHeight;
+    
+    // Set up static objects
+    drawWalls();
+    
+    // Draw the ball and paddle
+    playerPaddle.Draw();
+    mainBall.Draw();
+    	
 	// Recursive Step
 	requestAnimFrame(update);
+}
+
+function drawWalls()
+{
+    ctx.fillStyle = "white";
+    
+    // Top wall
+    ctx.fillRect(0,0, canvas.width, 5);
+    // Left wall
+    ctx.fillRect(0,0,5, canvas.height - 2);
+    // Right wall
+    ctx.fillRect(canvas.width - 5, 0, 5, canvas.height - 2);
 }
 		
