@@ -48,6 +48,27 @@ function Paddle()
         ctx.fillRect(this.x, this.y, this.w, this.h);
     };
     
+    this.collide = function(ball)
+    {
+        // Ball is too high to collide
+        if(ball.bottom() > this.y)
+            return;
+        
+        // Ball is too low to collide
+        if(ball.top() < this.y)
+            return;
+        
+        // Ball is too far to the left to collide
+        if(ball.right() < this.x)
+            return;
+        
+        // Ball is too far to the right to collide
+        if(ball.left() > (this.x + this.w))
+            return;
+            
+        this.rebound(ball);
+    };
+    
     this.rebound = function(ball)
     {
         ball.dy = ball.dy * -1;
@@ -62,6 +83,26 @@ function Ball()
     this.y = canvas.height / 2 - this.r;
     this.dx = 0;
     this.dy = 4;
+    
+    this.bottom = function()
+    {
+        return this.y - this.r;  
+    };
+    
+    this.top = function()
+    {
+        return this.y + this.r;  
+    };
+    
+    this.left = function()
+    {
+        return this.x - this.r;  
+    };
+    
+    this.right = function()
+    {
+        return this.x + this.r;  
+    };
     
     this.move = function()
     {
@@ -94,6 +135,12 @@ function Wall(x, y, width, height, orientation)
     {
         ctx.fillStyle = this.c;
         ctx.fillRect(this.x, this.y, this.w, this.h);
+    };
+    
+    this.collide = function(ball)
+    {
+        return; // todo check collision        
+        this.rebound(ball);
     };
     
     this.rebound = function(ball)
@@ -146,6 +193,9 @@ function update()
     // Move the paddle and ball
     moveObjects();
     
+    // Check for and handle collisions
+    collideObjects();
+    
     // Draw the paddle and ball
     drawNonStatic();
     	
@@ -190,6 +240,16 @@ function moveObjects()
     mainBall.move();
 }
 
-
-
+// Collision
+function collideObjects()
+{
+    // Attempt to collide the ball with
+    // the paddle and walls
+    playerPaddle.collide(mainBall);
+    
+    for(i = 0; i < walls.length; i++)
+    {
+        walls[i].collide(mainBall);
+    } 
+}
 		
