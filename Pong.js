@@ -21,8 +21,8 @@ canvas.addEventListener("mousemove", trackMouse, true);
 function trackMouse(e)
 {
     var rect = canvas.getBoundingClientRect();
-    mouse.x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
-    mouse.y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+    mouse.x = Math.round((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
+    mouse.y = Math.round((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 }
 
 // Declare classes
@@ -33,6 +33,14 @@ function Paddle()
     this.c = "white";
     this.x = canvas.width / 2 - this.w/2;
     this.y = canvas.height - this.h - 2;
+    
+    this.move = function()
+    {
+        if(mouse.x && mouse.y)
+        {
+            this.x = mouse.x - this.w/2;
+        }
+    };
     
     this.draw = function()
     {
@@ -54,6 +62,15 @@ function Ball()
     this.y = canvas.height / 2 - this.r;
     this.dx = 0;
     this.dy = 4;
+    
+    this.move = function()
+    {
+      // Apply dx
+      this.x += this.dx;
+      
+      // Apply dy
+      this.y += this.dy;
+    };
     
     this.draw = function()
     {
@@ -123,27 +140,30 @@ function update()
     //ctx.canvas.width = window.innerWidth;
     //ctx.canvas.height = window.innerHeight;
     
-    // Set up static objects
+    // Draw the static objects
     drawStatic();
     
     // Move the paddle and ball
-    if(mouse.x && mouse.y)
-    {
-        playerPaddle.x = mouse.x - playerPaddle.w/2;
-    }
+    moveObjects();
     
     // Draw the paddle and ball
-    playerPaddle.draw();
-    mainBall.draw();
+    drawNonStatic();
     	
 	// Recursive Step
 	requestAnimFrame(update);
 }
 
+// Drawing
 function drawStatic()
 {
     drawCanvas();
     drawWalls();
+}
+
+function drawNonStatic()
+{
+    playerPaddle.draw();
+    mainBall.draw();
 }
 
 function drawCanvas()
@@ -159,4 +179,17 @@ function drawWalls()
         walls[i].draw();
     }
 }
+
+// Movement
+function moveObjects()
+{
+    // Move the paddle
+    playerPaddle.move();
+    
+    // Move the ball
+    mainBall.move();
+}
+
+
+
 		
