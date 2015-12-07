@@ -139,22 +139,38 @@ function Wall(x, y, width, height, orientation)
     
     this.collide = function(ball)
     {
-        return; // todo check collision        
-        this.rebound(ball);
+        switch(this.orientation)
+        {
+            case "left":
+            if(ball.left() <= this.x + this.w)
+                this.rebound(ball);
+            break;
+            
+            case "right":
+            if(ball.right() >= this.x)
+                this.rebound(ball);
+            break;
+            
+            case "top":
+            if(ball.top() <= this.y + this.h)
+                this.rebound(ball);
+            break;
+        }
     };
     
     this.rebound = function(ball)
     {
-        switch(orientation)
+        switch(this.orientation)
         {
-            case "vertical":
-            // Invert ball.dy
-            ball.dy = ball.dy * -1;
+            // Invert ball.dx
+            case "left":
+            case "right":
+            ball.dx = ball.dx * -1;
             break;
             
-            case "horizontal":
-            // Invert ball.dx
-            ball.dx = ball.dx * -1;
+            case "top":
+            // Invert ball.dy
+            ball.dy = ball.dy * -1;
             break;
         }
     };
@@ -164,9 +180,9 @@ function Wall(x, y, width, height, orientation)
 mouse = {};
 var playerPaddle = new Paddle();
 var mainBall = new Ball();
-var leftWall = new Wall(0,0,5, canvas.height - 2);
-var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2);
-var topWall = new Wall(0,0, canvas.width, 5);
+var leftWall = new Wall(0,0,5, canvas.height - 2, "left");
+var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2, "right");
+var topWall = new Wall(0,0, canvas.width, 5, "top");
 var walls = [leftWall, rightWall, topWall];
 
 
@@ -243,10 +259,10 @@ function moveObjects()
 // Collision
 function collideObjects()
 {
-    // Attempt to collide the ball with
-    // the paddle and walls
+    // Try to collide with the paddle
     playerPaddle.collide(mainBall);
     
+    // Try to collide with the walls
     for(i = 0; i < walls.length; i++)
     {
         walls[i].collide(mainBall);
