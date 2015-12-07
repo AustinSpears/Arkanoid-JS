@@ -14,17 +14,15 @@ var requestAnimFrame =
 			window.setTimeout(callback, 1000/60);
 	    };
 
-// Objects
-mouse = {};
-
 // Add mousemove and mousedown events to the canvas
 canvas.addEventListener("mousemove", trackMouse, true);
 
 // Declare events
 function trackMouse(e)
 {
-    mouse.x = e.pageX;
-    mouse.y = e.pageY;
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+    mouse.y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
 }
 
 // Declare classes
@@ -32,37 +30,80 @@ function Paddle()
 {
     this.h = 8;
     this.w = canvas.width / 8;
-    this.color = "white";
+    this.c = "white";
     this.x = canvas.width / 2 - this.w/2;
     this.y = canvas.height - this.h - 2;
     
-    this.Draw = function Draw()
+    this.draw = function()
     {
-        ctx.fillRect(this.x, this.y, this.w, this.h, this.color);
+        ctx.fillStyle = this.c;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+    };
+    
+    this.rebound = function(ball)
+    {
+        ball.dy = ball.dy * -1;
     };
 };
 
 function Ball()
 {
     this.r = 5;
-    this.color = "white";
+    this.c = "white";
     this.x = canvas.width / 2 - this.r;
     this.y = canvas.height / 2 - this.r;
     this.dx = 0;
     this.dy = 4;
     
-    this.Draw = function Draw()
+    this.draw = function()
     {
         ctx.beginPath();
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = this.c;
         ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
         ctx.fill();
     };
 };
 
+function Wall(x, y, width, height, orientation)
+{
+    this.w = width;
+    this.h = height;
+    this.x = x;
+    this.y = y;
+    this.c = "white";
+    this.orientation = orientation;
+    
+    this.draw = function()
+    {
+        ctx.fillStyle = this.c;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+    };
+    
+    this.rebound = function(ball)
+    {
+        switch(orientation)
+        {
+            case "vertical":
+            // Invert ball.dy
+            ball.dy = ball.dy * -1;
+            break;
+            
+            case "horizontal":
+            // Invert ball.dx
+            ball.dx = ball.dx * -1;
+            break;
+        }
+    };
+}
+
 // Declare game objects
+mouse = {};
 var playerPaddle = new Paddle();
 var mainBall = new Ball();
+var leftWall = new Wall(0,0,5, canvas.height - 2);
+var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2);
+var topWall = new Wall(0,0, canvas.width, 5);
+var walls = [leftWall, rightWall, topWall];
 
 
 // Start the game!
@@ -92,8 +133,8 @@ function update()
     }
     
     // Draw the paddle and ball
-    playerPaddle.Draw();
-    mainBall.Draw();
+    playerPaddle.draw();
+    mainBall.draw();
     	
 	// Recursive Step
 	requestAnimFrame(update);
@@ -113,13 +154,9 @@ function drawCanvas()
 
 function drawWalls()
 {
-    ctx.fillStyle = "white";
-    
-    // Top wall
-    ctx.fillRect(0,0, canvas.width, 5);
-    // Left wall
-    ctx.fillRect(0,0,5, canvas.height - 2);
-    // Right wall
-    ctx.fillRect(canvas.width - 5, 0, 5, canvas.height - 2);
+    for(i = 0; i < walls.length; i++)
+    {
+        walls[i].draw();
+    }
 }
 		
