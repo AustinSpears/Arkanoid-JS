@@ -1,3 +1,4 @@
+// =========================== GAME LOGIC ===================================== 
 // Get the canvas
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -17,15 +18,31 @@ var requestAnimFrame =
 // Add mousemove and mousedown events to the canvas
 canvas.addEventListener("mousemove", trackMouse, true);
 
-// Declare events
+// Declare game objects
+mouse = {};
+var playerPaddle = new Paddle();
+var mainBall = new Ball();
+var leftWall = new Wall(0,0,5, canvas.height - 2, "left");
+var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2, "right");
+var topWall = new Wall(0,0, canvas.width, 5, "top");
+var walls = [leftWall, rightWall, topWall];
+
+
+// Start the game!
+init();
+
+// =========================== DECLARATIONS ===================================
+
+// Declare events ==========================
 function trackMouse(e)
 {
     var rect = canvas.getBoundingClientRect();
     mouse.x = Math.round((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
     mouse.y = Math.round((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 }
+// =========================================
 
-// Declare classes
+// Declare classes =========================
 function Paddle()
 {
     this.h = 8;
@@ -164,33 +181,28 @@ function Wall(x, y, width, height, orientation)
         {
             // Invert ball.dx
             case "left":
-            case "right":
             ball.dx = ball.dx * -1;
+            ball.x = this.x + this.w + ball.r;
             break;
             
-            case "top":
+            case "right":
+            ball.dx = ball.dx * -1;
+            ball.x = this.x - ball.r;
+            break;
+            
             // Invert ball.dy
+            case "top":
             ball.dy = ball.dy * -1;
+            
+            // Move the ball out of the wall
+            ball.y = this.y + this.h + ball.r;
             break;
         }
     };
 }
+// =========================================
 
-// Declare game objects
-mouse = {};
-var playerPaddle = new Paddle();
-var mainBall = new Ball();
-var leftWall = new Wall(0,0,5, canvas.height - 2, "left");
-var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2, "right");
-var topWall = new Wall(0,0, canvas.width, 5, "top");
-var walls = [leftWall, rightWall, topWall];
-
-
-// Start the game!
-init();
-
-
-// Declare functions
+// Declare functions ========================
 function init()
 {  
     // Start frame loop
@@ -268,4 +280,5 @@ function collideObjects()
         walls[i].collide(mainBall);
     } 
 }
+// =========================================
 		
