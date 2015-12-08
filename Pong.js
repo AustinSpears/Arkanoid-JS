@@ -20,11 +20,12 @@ canvas.addEventListener("mousemove", trackMouse, true);
 
 // Declare game objects
 mouse = {};
+const MAXBOUNCEANGLE = Math.PI / 12;
 var playerPaddle = new Paddle();
 var mainBall = new Ball();
-var leftWall = new Wall(0,0,5, canvas.height - 2, "left");
-var rightWall = new Wall(canvas.width - 5, 0, 5, canvas.height - 2, "right");
-var topWall = new Wall(0,0, canvas.width, 5, "top");
+var leftWall = new Wall(0,0,8, canvas.height - 2, "left");
+var rightWall = new Wall(canvas.width - 8, 0, 8, canvas.height - 2, "right");
+var topWall = new Wall(0,0, canvas.width, 8, "top");
 var walls = [leftWall, rightWall, topWall];
 
 
@@ -68,11 +69,11 @@ function Paddle()
     this.collide = function(ball)
     {
         // Ball is too high to collide
-        if(ball.bottom() > this.y)
+        if(ball.bottom() < this.y)
             return;
         
         // Ball is too low to collide
-        if(ball.top() < this.y)
+        if(ball.top() > this.y)
             return;
         
         // Ball is too far to the left to collide
@@ -87,55 +88,16 @@ function Paddle()
     };
     
     this.rebound = function(ball)
-    {
-        ball.dy = ball.dy * -1;
-    };
-};
-
-function Ball()
-{
-    this.r = 5;
-    this.c = "white";
-    this.x = canvas.width / 2 - this.r;
-    this.y = canvas.height / 2 - this.r;
-    this.dx = 0;
-    this.dy = 4;
-    
-    this.bottom = function()
-    {
-        return this.y - this.r;  
-    };
-    
-    this.top = function()
-    {
-        return this.y + this.r;  
-    };
-    
-    this.left = function()
-    {
-        return this.x - this.r;  
-    };
-    
-    this.right = function()
-    {
-        return this.x + this.r;  
-    };
-    
-    this.move = function()
-    {
-      // Apply dx
-      this.x += this.dx;
-      
-      // Apply dy
-      this.y += this.dy;
-    };
-    
-    this.draw = function()
-    {
-        ctx.beginPath();
-        ctx.fillStyle = this.c;
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-        ctx.fill();
+    {   
+        var relativeIntersectX = (this.x + (this.w/2)) - ball.x;
+        var normalizedRelativeIntersectionX = (relativeIntersectX/(this.w/2));
+        var bounceAngle = normalizedRelativeIntersectionX * (Math.PI / 2 - MAXBOUNCEANGLE);
+        var ballSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+        
+        ball.dx = ballSpeed * Math.cos(bounceAngle);
+        ball.dy = ballSpeed * -Math.sin(bounceAngle);
+        
+        ball.y = this.y - ball.r - 1;
     };
 };
 
@@ -200,6 +162,53 @@ function Wall(x, y, width, height, orientation)
         }
     };
 }
+
+function Ball()
+{
+    this.r = 5;
+    this.c = "white";
+    this.x = canvas.width / 2 - this.r;
+    this.y = canvas.height / 2 - this.r;
+    this.dx = 0;
+    this.dy = 4;
+    
+    this.bottom = function()
+    {
+        return this.y + this.r;  
+    };
+    
+    this.top = function()
+    {
+        return this.y - this.r;  
+    };
+    
+    this.left = function()
+    {
+        return this.x - this.r;  
+    };
+    
+    this.right = function()
+    {
+        return this.x + this.r;  
+    };
+    
+    this.move = function()
+    {
+      // Apply dx
+      this.x += this.dx;
+      
+      // Apply dy
+      this.y += this.dy;
+    };
+    
+    this.draw = function()
+    {
+        ctx.beginPath();
+        ctx.fillStyle = this.c;
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+        ctx.fill();
+    };
+};
 // =========================================
 
 // Declare functions ========================
