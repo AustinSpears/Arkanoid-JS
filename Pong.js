@@ -89,12 +89,12 @@ function Paddle()
     
     this.rebound = function(ball)
     {   
-        var relativeIntersectX = (this.x + (this.w/2)) - ball.x;
+        var relativeIntersectX = ball.x - (this.x + (this.w/2));
         var normalizedRelativeIntersectionX = (relativeIntersectX/(this.w/2));
-        var bounceAngle = normalizedRelativeIntersectionX * (Math.PI / 2 - MAXBOUNCEANGLE);
+        var bounceAngle = normalizedRelativeIntersectionX + (Math.PI / 2);
         var ballSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
         
-        ball.dx = ballSpeed * Math.cos(bounceAngle);
+        ball.dx = ballSpeed * -Math.cos(bounceAngle);
         ball.dy = ballSpeed * -Math.sin(bounceAngle);
         
         ball.y = this.y - ball.r - 1;
