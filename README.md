@@ -1,1 +1,1 @@
-# HTML5-Pong
+# HTML5-Arkanoid
