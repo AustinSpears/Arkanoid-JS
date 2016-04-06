@@ -1,0 +1,12 @@
+body 
+{ 
+	background: gray;
+}
+
+canvas 
+{
+	display: block;
+	background: black;
+	margin: auto;
+}
+	
