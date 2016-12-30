@@ -175,6 +175,7 @@ function drawBrick(x, y)
 	ctx.strokeStyle = "white";
 	ctx.lineWidth = 1;
 	
+	// Factor the width / height of the walls into the brick placement
 	ctx.fillRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
 	ctx.strokeRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
 
