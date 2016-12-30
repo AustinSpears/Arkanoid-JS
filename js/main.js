@@ -179,6 +179,7 @@ function drawBrick(x, y)
 	ctx.fillRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
 	ctx.strokeRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
 
+	// Reset the drawing context properties
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = 0;
 }
