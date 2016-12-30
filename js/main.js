@@ -1,6 +1,6 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
-require(['objects/ball', 'objects/wall', 'objects/paddle'], function(){
+require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick'], function(){
     
 // Get the canvas
 var canvas = document.getElementById("canvas");
@@ -37,7 +37,10 @@ var leftWall = new Wall(0,0,8, canvas.height - 2, "left", ctx);
 var rightWall = new Wall(canvas.width - 8, 0, 8, canvas.height - 2, "right", ctx);
 var topWall = new Wall(0,0, canvas.width, 8, "top", ctx);
 var walls = [leftWall, rightWall, topWall];
+var brickArray;
 
+// Create the brick array
+initBrickArray();
 
 // Start the game!
 init();
@@ -55,6 +58,41 @@ function trackMouse(e)
 
 
 // Declare functions ========================
+function initBrickArray()
+{
+	// Create a 2d array the size of the canvas
+	// Canvas height = 600
+	// Canvas width = 800
+	brickArray = [];
+	var brickHeight = 20;
+	
+	// Make board 10 bricks wide taking into account the walls
+	var brickWidth = (canvas.width - (walls[0].w * 2)) / 10;
+	
+	var arrayHeight = (canvas.height - (walls[2].h)) / brickHeight;
+	var arrayWidth = 10;
+	
+	// Create spots for the bricks
+	for(var i = 0; i < arrayWidth; i++)
+	{
+		brickArray[i] = [];
+		for(var j = 0; j < arrayHeight; j++)
+		{
+			brickArray[i][j] = new Brick(brickWidth, brickHeight);
+		}	
+	}
+	
+	// Turn on the first 5 rows of bricks
+	for(var i = 0; i < arrayWidth; i++)
+	{
+		for(var j = 0; j < 5; j++)
+		{
+			brickArray[i][j].broken = false;
+		}
+	}
+}
+
+
 function init()
 {  
     // Start frame loop
@@ -88,6 +126,7 @@ function drawStatic()
 {
     drawCanvas();
     drawWalls();
+    drawBricks();
 }
 
 function drawNonStatic()
@@ -108,6 +147,39 @@ function drawWalls()
     {
         walls[i].draw();
     }
+}
+
+function drawBricks()
+{
+	// Go through the brick array and draw any non-broken bricks
+	for(i = 0; i < brickArray.length; i++)
+	{
+		for(j = 0; j < brickArray[0].length; j++)
+		{
+			drawBrick(i,j);			
+		}
+	}
+}
+
+function drawBrick(x, y)
+{
+	// Get the brick
+	var brick = brickArray[x][y];
+	
+	// No need to draw broken brick
+	if(brick.broken)
+		return;
+	
+	// Draw the brick at array position (x,y)
+	ctx.fillStyle = brick.c;
+	ctx.strokeStyle = "white";
+	ctx.lineWidth = 1;
+	
+	ctx.fillRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
+	ctx.strokeRect((x * brick.w) + walls[0].w, (y * brick.h) + walls[2].h, brick.w, brick.h);
+
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 0;
 }
 
 // Movement
