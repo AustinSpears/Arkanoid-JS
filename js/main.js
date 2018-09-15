@@ -33,9 +33,9 @@ var yPosition = canvas.height / 2 - ballRadius;
 var mainBall = new Ball(xPosition, yPosition, ballRadius, ctx);
 
 // Create the walls
-var leftWall = new Wall(0,0,8, canvas.height - 2, "left", ctx);
-var rightWall = new Wall(canvas.width - 8, 0, 8, canvas.height - 2, "right", ctx);
-var topWall = new Wall(0,0, canvas.width, 8, "top", ctx);
+var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
+var rightWall = new Wall(canvas.width, 0, 0, canvas.height, "right", ctx);
+var topWall = new Wall(0,0, canvas.width, 0, "top", ctx);
 var walls = [leftWall, rightWall, topWall];
 var brickArray;
 
@@ -66,10 +66,10 @@ function initBrickArray()
 	brickArray = [];
 	var brickHeight = 20;
 	
-	// Make board 10 bricks wide taking into account the walls
-	var brickWidth = (canvas.width - (walls[0].w * 2)) / 10;
+	// Make board 10 bricks wide
+	var brickWidth = (canvas.width) / 10;
 	
-	var arrayHeight = (canvas.height - (walls[2].h)) / brickHeight;
+	var arrayHeight = (canvas.height) / brickHeight;
 	var arrayWidth = 10;
 	
 	// Create spots for the bricks
@@ -125,7 +125,6 @@ function update()
 function drawStatic()
 {
     drawCanvas();
-    drawWalls();
     drawBricks();
 }
 
