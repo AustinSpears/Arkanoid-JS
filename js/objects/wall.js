@@ -42,11 +42,15 @@ function Wall(x, y, width, height, orientation, drawingContext)
             // Invert ball.dx
             case "left":
             ball.dx = ball.dx * -1;
+
+            // Move the ball out of the wall
             ball.x = this.x + this.w + ball.r;
             break;
             
             case "right":
             ball.dx = ball.dx * -1;
+
+            // Move the ball out of the wall
             ball.x = this.x - ball.r;
             break;
             

@@ -78,7 +78,10 @@ function initBrickArray()
 		brickArray[i] = [];
 		for(var j = 0; j < arrayHeight; j++)
 		{
-			brickArray[i][j] = new Brick(brickWidth, brickHeight);
+			var x = i * brickWidth;
+			var y = j * brickHeight;
+
+			brickArray[i][j] = new Brick(x, y, brickWidth, brickHeight);
 		}	
 	}
 	
@@ -193,9 +196,71 @@ function collideObjects()
     for(i = 0; i < walls.length; i++)
     {
         walls[i].collide(mainBall);
-    } 
+	}
+
+    // Try to collide with the bricks
+	collideWithBricks();
 }
+
+function collideWithBricks()
+{
+	var closestBrick = null;
+	var closestDist = 99999;
+	for(i = 0; i < brickArray.length; i++)
+	{
+		for(j = 0; j < brickArray[0].length; j++)
+		{
+			var currBrick = brickArray[i][j];
+
+			// Brick is already broken so skip
+			if(currBrick.broken)
+			{
+				continue;
+			}
+
+			// No collision so skip
+			if(!brickArray[i][j].collide(mainBall))
+			{
+				continue;
+			}
+			
+			// update the min brick
+			var currDist = distanceBetweenBrickAndBall(currBrick, mainBall);
+			if(currDist < closestDist)
+			{
+				closestDist = currDist;
+				closestBrick = currBrick;
+			}
+		}
+	}
+
+	// Found a brick to rebound from!
+	if(closestBrick != null)
+	{
+		closestBrick.rebound(mainBall);
+	}
+}
+
+function distance(x1, y1, x2, y2)
+{
+	var a = x1 - x2;
+	var b = y1 - y2;
+
+	return Math.sqrt(a*a + b*b);
+}
+
+function distanceBetweenBrickAndBall(brick, ball)
+{
+	return distance(brick.centerX, brick.centerY, ball.x, ball.y);
+}
+
 // =========================================
 });
 
-		
+/* Problems to solve:
+
+1. Collision detection between brick and ball - Done
+2. Which side did the ball hit - Done
+3. Recursive step to accomodate multiple collisons in a single frame
+
+*/
