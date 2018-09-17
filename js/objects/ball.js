@@ -7,6 +7,7 @@ function Ball(xPosition, yPosition, radius, drawingContext)
     this.dx = 0;
     this.dy = 4;
     this.ctx = drawingContext;
+    this.numCollisions = 0;
     
     this.bottom = function()
     {

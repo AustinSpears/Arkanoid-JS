@@ -16,8 +16,8 @@ function Brick(x, y, width, height)
 	{
 		// Find the horizontal and vertical distances between the
 		// ball's center and the rectangle's center
-		var distX = Math.abs(ball.x - (this.x - this.w / 2));
-		var distY = Math.abs(ball.y - (this.y - this.h / 2));
+		var distX = Math.abs(ball.x - (this.x + this.w / 2));
+		var distY = Math.abs(ball.y - (this.y + this.h / 2));
 
 		// If the distance is greater than half the brick + the circle's
 		// radius, then they are too far apart to collide
@@ -52,39 +52,39 @@ function Brick(x, y, width, height)
 	this.rebound = function(ball)
 	{
 		// Hit from below
-		if(ball.y <= this.y - (this.h / 2))
+		if(ball.y <= this.y + this.h)
 		{
-            ball.dy = ball.dy * -1;
+			ball.dy = ball.dy * -1;
             
             // Move the ball out of the brick
-            ball.y = this.y + this.h + ball.r;
+            //ball.y = this.y + this.h + ball.r;
 		}
 
 		// Hit was from above the brick
-		if(ball.y >= this.y + (this.h/2))
+		else if(ball.y >= this.y)
 		{
 			ball.dy = ball.dy * -1;
 
 			// Move the ball out of the brick
-			ball.y = this.y - ball.r;
+			//ball.y = this.y - ball.r;
 		}
   		
 		// Hit was on left
-		if(ball.x < this.x)
+		else if(ball.x < this.x)
 		{
 			ball.dx = ball.dx * -1;
 
 			// Move the ball out of the brick
-			ball.x = this.x - ball.r;
+			//ball.x = this.x - ball.r;
 		}
   		
 		// Hit was on right
-		if(ball.x > this.x)
+		else if(ball.x > this.x + this.w)
 		{
 			ball.dx = ball.dx * -1;
 
 			// Move the ball out of the brick
-			ball.x = this.x + this.w + ball.r;
+			//ball.x = this.x + this.w + ball.r;
 		}	
 		
 		// Brick is now broken!

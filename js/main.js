@@ -88,7 +88,7 @@ function initBrickArray()
 	// Turn on the first 5 rows of bricks
 	for(var i = 0; i < arrayWidth; i++)
 	{
-		for(var j = 0; j < 5; j++)
+		for(var j = 0; j < 8; j++)
 		{
 			brickArray[i][j].broken = false;
 		}

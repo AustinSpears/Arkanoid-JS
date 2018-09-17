@@ -48,7 +48,10 @@ function Paddle(canvas, drawingContext, mouse)
         var relativeIntersectX = ball.x - (this.x + (this.w/2));
         var normalizedRelativeIntersectionX = (relativeIntersectX/(this.w/2));
         var bounceAngle = normalizedRelativeIntersectionX + (Math.PI / 2);
+
+        ball.numCollisions++;
         var ballSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+        var ballSpeed = Math.min(5, ballSpeed + Math.min(2, ball.numCollisions / 5));
         
         ball.dx = ballSpeed * -Math.cos(bounceAngle);
         ball.dy = ballSpeed * -Math.sin(bounceAngle);
