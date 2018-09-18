@@ -21,25 +21,26 @@ var requestAnimFrame =
 // Add mousemove and mousedown events to the canvas
 canvas.addEventListener("mousemove", trackMouse, true);
 
+// Hook up restart event
+document.getElementById("restartButton").onclick = restartGame;
+
 // Declare game objects
 mouse = {};
 const MAXBOUNCEANGLE = Math.PI / 12;
 var playerPaddle = new Paddle(canvas, ctx, mouse);
-
-// Create the ball
-var ballRadius = 5;
-var xPosition = canvas.width / 2 - ballRadius;
-var yPosition = canvas.height / 2 - ballRadius;
-var mainBall = new Ball(xPosition, yPosition, ballRadius, ctx);
 
 // Create the walls
 var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
 var rightWall = new Wall(canvas.width, 0, 0, canvas.height, "right", ctx);
 var topWall = new Wall(0,0, canvas.width, 0, "top", ctx);
 var walls = [leftWall, rightWall, topWall];
-var brickArray;
+
+// Create the ball
+var ballRadius = 5;
+initBallPosition();
 
 // Create the brick array
+var brickArray;
 initBrickArray();
 
 // Start the game!
@@ -54,15 +55,27 @@ function trackMouse(e)
     mouse.x = Math.round((e.clientX - rect.left) / (rect.right - rect.left) * canvas.width);
     mouse.y = Math.round((e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height);
 }
+
+function restartGame()
+{
+	initBallPosition();
+	initBrickArray();
+}
 // =========================================
 
 
 // Declare functions ========================
+function initBallPosition()
+{
+	xPosition = canvas.width / 2 - ballRadius;
+	yPosition = canvas.height / 2 - ballRadius;
+	mainBall = new Ball(xPosition, yPosition, ballRadius, ctx);
+}
+
 function initBrickArray()
 {
 	// Create a 2d array the size of the canvas
-	// Canvas height = 600
-	// Canvas width = 800
+	// Canvas dimensions: 800x600
 	brickArray = [];
 	var brickHeight = 20;
 	
@@ -94,7 +107,6 @@ function initBrickArray()
 		}
 	}
 }
-
 
 function init()
 {  

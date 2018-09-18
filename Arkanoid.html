@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
+  <style>
+    h1 {
+      color: white;
+      text-align: center;
+    }
+    .restartButton {
+      width:817px;
+    }
+  </style>
   <head>
     <title>Arkanoid</title>
     <link  rel="stylesheet" href="css/main.css">
   </head>
   <body>
+    <h1>Janky Arkanoid</h1>
+    <div>
+      <input class="restartButton" id="restartButton" type="button" value="Restart"/>
+    </div>
   	<canvas  id="canvas" width="800" height="600"></canvas>
   	<script data-main="js/main" src="js/require.js"></script>   
   </body>

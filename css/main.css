@@ -1,6 +1,7 @@
 body 
 { 
 	background: gray;
+	text-align: center;
 }
 
 canvas 
@@ -8,6 +9,7 @@ canvas
 	display: block;
 	background: black;
 	margin: auto;
+	cursor: none;
 	border-left: 8px solid white;
 	border-right: 8px solid white;
 	border-top: 8px solid white; 
