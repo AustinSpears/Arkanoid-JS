@@ -11,7 +11,7 @@ function Ball(xPosition, yPosition, radius, drawingContext)
     
     this.bottom = function()
     {
-        return this.y + this.r;  
+        return this.y + this.r; 
     };
     
     this.top = function()

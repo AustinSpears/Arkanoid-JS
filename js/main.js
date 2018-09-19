@@ -1,6 +1,6 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
-require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick'], function(){
+require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup'], function(){
     
 // Get the canvas
 var canvas = document.getElementById("canvas");
@@ -42,6 +42,10 @@ initBallPosition();
 // Create the brick array
 var brickArray;
 initBrickArray();
+
+// Create the powerup list
+var fallingPowerups = [];
+var activePowerup;
 
 // Start the game!
 init();
@@ -146,13 +150,23 @@ function drawStatic()
 function drawNonStatic()
 {
     playerPaddle.draw();
-    mainBall.draw();
+	mainBall.draw();
+	drawPowerups();
+
 }
 
 function drawCanvas()
 {
     ctx.fillStyle = "black";
     ctx.fillRect(0,0, window.innerWidth, window.innerHeight);
+}
+
+function drawPowerups()
+{
+	// Iterate through and draw the powerups
+	fallingPowerups.forEach(function(powerup){
+		powerup.draw();
+	});
 }
 
 function drawBricks()
@@ -195,14 +209,34 @@ function moveObjects()
     playerPaddle.move();
     
     // Move the ball
-    mainBall.move();
+	mainBall.move();
+	
+	movePowerups();
+}
+
+function movePowerups()
+{
+	for(i = fallingPowerups.length - 1; i >= 0; i--)
+	{
+		var powerup = fallingPowerups[i];
+		powerup.y = powerup.y + powerup.dy;
+
+		// Powerup went off gameboard
+		if(powerup.y > 800)
+		{
+			fallingPowerups.splice(i, 1);
+		}
+	}
 }
 
 // Collision
 function collideObjects()
 {
     // Try to collide with the paddle
-    playerPaddle.collide(mainBall);
+	playerPaddle.collideBall(mainBall);
+	
+	// Try to collide with any active powerups
+	//fallingPowerups.forEach()
     
     // Try to collide with the walls
     for(i = 0; i < walls.length; i++)
@@ -250,6 +284,21 @@ function collideWithBricks()
 	if(closestBrick != null)
 	{
 		closestBrick.rebound(mainBall);
+		
+		spawnPowerup(closestBrick);
+	}
+}
+
+function spawnPowerup(brick)
+{
+	// Add a new powerup to the fallingPowerups list so that it starts interacting
+	var powerup = new Powerup(powertypes.BIGPADDLE, ctx)
+	powerup.init(brick);
+
+	// Currently only allow a single powerup
+	if(fallingPowerups.length < 1)
+	{
+		fallingPowerups.push(powerup);
 	}
 }
 

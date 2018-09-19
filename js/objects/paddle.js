@@ -22,7 +22,7 @@ function Paddle(canvas, drawingContext, mouse)
         this.ctx.fillRect(this.x, this.y, this.w, this.h);
     };
     
-    this.collide = function(ball)
+    this.collideBall = function(ball)
     {
         // Ball is too high to collide
         if(ball.bottom() < this.y)
