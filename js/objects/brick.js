@@ -106,5 +106,13 @@ function Brick(x, y, width, height)
 		
 		// Brick is now broken!
 		this.broken = true;
+		this.sound_hit();
 	}
+
+	this.sound_hit = function()
+    {      
+        var audio = document.getElementById("hit_brick");
+        audio.volume = 0.2;
+        audio.play();
+    }
 }

@@ -1,7 +1,7 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
 require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup'], function(){
-    
+	
 // Get the canvas
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -150,7 +150,7 @@ function update()
     drawNonStatic();
         
     // Recursive Step
-    requestAnimFrame(update);
+	requestAnimFrame(update);
 }
 
 // Drawing
