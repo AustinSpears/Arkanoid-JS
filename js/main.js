@@ -27,7 +27,7 @@ document.getElementById("restartButton").onclick = restartGame;
 // Declare game objects
 mouse = {};
 const MAXBOUNCEANGLE = Math.PI / 12;
-var playerPaddle = new Paddle(canvas, ctx, mouse);
+var playerPaddle = new Paddle(canvas, mouse);
 
 // Create the walls
 var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
@@ -121,7 +121,7 @@ function initPowerups()
 
 function initPaddle()
 {
-	playerPaddle = new Paddle(canvas, ctx, mouse);
+	playerPaddle = new Paddle(canvas, mouse);
 }
 
 // Game Loop
@@ -162,10 +162,9 @@ function drawStatic()
 
 function drawNonStatic()
 {
-    playerPaddle.draw();
-	mainBall.draw();
+    playerPaddle.draw(ctx);
+	mainBall.draw(ctx);
 	drawPowerups();
-
 }
 
 function drawCanvas()
@@ -178,7 +177,7 @@ function drawPowerups()
 {
 	// Iterate through and draw the powerups
 	fallingPowerups.forEach(function(powerup){
-		powerup.draw();
+		powerup.draw(ctx);
 	});
 }
 
@@ -189,30 +188,9 @@ function drawBricks()
 	{
 		for(j = 0; j < brickArray[0].length; j++)
 		{
-			drawBrick(i,j);			
+			brickArray[i][j].draw(ctx);		
 		}
 	}
-}
-
-function drawBrick(x, y)
-{
-	// Get the brick
-	var brick = brickArray[x][y];
-	
-	// No need to draw broken brick
-	if(brick.broken)
-		return;
-	
-	// Draw the brick at array position (x,y)
-	ctx.fillStyle = brick.c;
-	ctx.strokeStyle = "white";
-	ctx.lineWidth = 1;
-	ctx.fillRect((x * brick.w), (y * brick.h), brick.w, brick.h);
-	ctx.strokeRect((x * brick.w), (y * brick.h), brick.w, brick.h);
-
-	// Reset the drawing context properties
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = 0;
 }
 
 // Movement

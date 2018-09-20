@@ -1,4 +1,4 @@
-function Ball(xPosition, yPosition, radius, drawingContext)
+function Ball(xPosition, yPosition, radius)
 {
     this.r = radius;
     this.c = "white";
@@ -6,7 +6,6 @@ function Ball(xPosition, yPosition, radius, drawingContext)
     this.y = yPosition;//canvas.height / 2 - this.r;
     this.dx = 0;
     this.dy = 4;
-    this.ctx = drawingContext;
     this.numCollisions = 0;
     
     this.bottom = function()
@@ -38,11 +37,11 @@ function Ball(xPosition, yPosition, radius, drawingContext)
       this.y += this.dy;
     };
     
-    this.draw = function()
+    this.draw = function(ctx)
     {
-        this.ctx.beginPath();
-        this.ctx.fillStyle = this.c;
-        this.ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-        this.ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = this.c;
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+        ctx.fill();
     };
 };

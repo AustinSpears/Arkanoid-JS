@@ -2,10 +2,9 @@ const powertypes = {
     BIGPADDLE: 'bigpaddle'
 }
 
-function Powerup(powerType, drawingContext)
+function Powerup(powerType)
 {
     this.power = powerType;
-    this.ctx = drawingContext;
     this.x;
     this.y;
     this.w;
@@ -46,14 +45,12 @@ function Powerup(powerType, drawingContext)
         return this;
       }
 
-    this.draw = function()
+    this.draw = function(ctx)
     {
-        this.ctx.fillStyle = this.color;
-
-        this.ctx.roundRect(this.x, this.y, this.w, this.h, 10).fill();
-        //this.ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.fillStyle = this.color;
+        ctx.roundRect(this.x, this.y, this.w, this.h, 10).fill();
 
         // Reset the drawing context properties
-        this.ctx.lineWidth = 0;
+        ctx.lineWidth = 0;
     }
 }

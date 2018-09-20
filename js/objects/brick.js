@@ -11,6 +11,23 @@ function Brick(x, y, width, height)
 	this.centerX = this.x + this.w / 2;
 	this.centerY = this.y + this.h / 2;
 
+	this.draw = function(ctx)
+	{
+		// No need to draw broken brick
+		if(this.broken)
+			return;
+
+		ctx.fillStyle = this.c;
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 1;
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+		ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+		// Reset the drawing context properties
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = 0;
+	}
+
 	// Determine if the ball collides with the brick
 	this.collide = function(ball)
 	{

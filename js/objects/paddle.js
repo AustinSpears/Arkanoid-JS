@@ -1,11 +1,10 @@
-function Paddle(canvas, drawingContext, mouse)
+function Paddle(canvas, mouse)
 {
     this.h = 8;
     this.w = canvas.width / 8;
     this.c = "white";
     this.x = canvas.width / 2 - this.w/2;
     this.y = canvas.height - this.h - 2;
-    this.ctx = drawingContext;
     this.mouse = mouse;
     this.big = false;
 
@@ -37,10 +36,10 @@ function Paddle(canvas, drawingContext, mouse)
         }
     };
     
-    this.draw = function()
+    this.draw = function(ctx)
     {
-        this.ctx.fillStyle = this.c;
-        this.ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.fillStyle = this.c;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
     };
 
     this.collidePowerup = function(powerup)
