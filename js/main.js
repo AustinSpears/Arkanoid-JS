@@ -323,15 +323,16 @@ function applyPowerup(powerup)
 
 function spawnPowerup(brick)
 {
-	// Add a new powerup to the fallingPowerups list so that it starts interacting
+	// 1/5 chance to spawn a powerup
+	if(Math.floor(Math.random() * 5) > 0)
+		return;
+
+	// Init the new powerup - todo: randomize this once there are more powerups
 	var powerup = new Powerup(powertypes.BIGPADDLE, ctx)
 	powerup.init(brick);
 
-	// Currently only allow a single powerup
-	if(fallingPowerups.length < 1)
-	{
-		fallingPowerups.push(powerup);
-	}
+	// Add the new powerup to the fallingPowerups list so that it starts interacting
+	fallingPowerups.push(powerup);
 }
 
 // Helper functions
