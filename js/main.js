@@ -45,14 +45,13 @@ initBrickArray();
 
 // Create the powerup list
 var fallingPowerups = [];
-var activePowerup;
 
 // Start the game!
 init();
 
-// =========================== DECLARATIONS ===================================
+// ======================== DECLARATIONS ========================
 
-// Declare events ==========================
+// ======================== EVENTS START ========================
 function trackMouse(e)
 {
     var rect = canvas.getBoundingClientRect();
@@ -62,13 +61,16 @@ function trackMouse(e)
 
 function restartGame()
 {
+	initPaddle();
 	initBallPosition();
 	initBrickArray();
+	initPowerups();
 }
-// =========================================
+// ======================== EVENTS END ========================
 
+// ======================== FUNCTIONS START ===================
 
-// Declare functions ========================
+// State initialization
 function initBallPosition()
 {
 	xPosition = canvas.width / 2 - ballRadius;
@@ -112,6 +114,17 @@ function initBrickArray()
 	}
 }
 
+function initPowerups()
+{
+	fallingPowerups = [];
+}
+
+function initPaddle()
+{
+	playerPaddle = new Paddle(canvas, ctx, mouse);
+}
+
+// Game Loop
 function init()
 {  
     // Start frame loop
@@ -256,16 +269,6 @@ function collideObjects()
 	collideWithBricks();
 }
 
-function applyPowerup(powerup)
-{
-	switch(powerup.power)
-	{
-		case powertypes.BIGPADDLE:
-		playerPaddle.applyPowerup(powertypes.BIGPADDLE);
-		break;
-	}
-}
-
 function collideWithBricks()
 {
 	var closestBrick = null;
@@ -307,6 +310,17 @@ function collideWithBricks()
 	}
 }
 
+// Manage powerups
+function applyPowerup(powerup)
+{
+	switch(powerup.power)
+	{
+		case powertypes.BIGPADDLE:
+		playerPaddle.applyPowerup(powertypes.BIGPADDLE);
+		break;
+	}
+}
+
 function spawnPowerup(brick)
 {
 	// Add a new powerup to the fallingPowerups list so that it starts interacting
@@ -320,6 +334,7 @@ function spawnPowerup(brick)
 	}
 }
 
+// Helper functions
 function distance(x1, y1, x2, y2)
 {
 	var a = x1 - x2;
@@ -333,13 +348,5 @@ function distanceBetweenBrickAndBall(brick, ball)
 	return distance(brick.centerX, brick.centerY, ball.x, ball.y);
 }
 
-// =========================================
+// ======================== FUNCTIONS END =====================
 });
-
-/* Problems to solve:
-
-1. Collision detection between brick and ball - Done
-2. Which side did the ball hit - Done
-3. Recursive step to accomodate multiple collisons in a single frame
-
-*/
