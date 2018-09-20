@@ -236,7 +236,15 @@ function collideObjects()
 	playerPaddle.collideBall(mainBall);
 	
 	// Try to collide with any active powerups
-	//fallingPowerups.forEach()
+	for(i = fallingPowerups.length - 1; i >= 0; i--)
+	{
+		var powerup = fallingPowerups[i];
+		if(playerPaddle.collidePowerup(powerup))
+		{
+			applyPowerup(powerup);
+			fallingPowerups.splice(i, 1);
+		}
+	}
     
     // Try to collide with the walls
     for(i = 0; i < walls.length; i++)
@@ -246,6 +254,16 @@ function collideObjects()
 
     // Try to collide with the bricks
 	collideWithBricks();
+}
+
+function applyPowerup(powerup)
+{
+	switch(powerup.power)
+	{
+		case powertypes.BIGPADDLE:
+		playerPaddle.applyPowerup(powertypes.BIGPADDLE);
+		break;
+	}
 }
 
 function collideWithBricks()
