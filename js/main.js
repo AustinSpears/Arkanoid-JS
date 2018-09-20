@@ -28,6 +28,8 @@ document.getElementById("restartButton").onclick = restartGame;
 mouse = {};
 const MAXBOUNCEANGLE = Math.PI / 12;
 var playerPaddle = new Paddle(canvas, mouse);
+var gameOverFlag = false;
+var gameFrameID = null;
 
 // Create the walls
 var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
@@ -61,11 +63,18 @@ function trackMouse(e)
 
 function restartGame()
 {
+	gameOverFlag = false;
 	initPaddle();
 	initBallPosition();
 	initBrickArray();
 	initPowerups();
+	init();
+
+	var audio = document.getElementById("game_start");
+	audio.volume = 0.4;
+	audio.play();
 }
+
 // ======================== EVENTS END ========================
 
 // ======================== FUNCTIONS START ===================
@@ -127,8 +136,14 @@ function initPaddle()
 // Game Loop
 function init()
 {  
+	// Stop the old game
+	if(gameFrameID != null)
+	{
+		cancelAnimationFrame(gameFrameID);
+	}
+
     // Start frame loop
-    requestAnimFrame(update);
+    gameFrameID = requestAnimFrame(update);
 }
 
 function update()
@@ -141,7 +156,12 @@ function update()
     drawStatic();
     
     // Move the paddle and ball
-    moveObjects();
+	moveObjects();
+	
+	if(gameOverFlag == true)
+	{
+		return;
+	}
     
     // Check for and handle collisions
     collideObjects();
@@ -201,6 +221,12 @@ function moveObjects()
     
     // Move the ball
 	mainBall.move();
+
+	if(mainBall.y > 600)
+	{
+		gameOver();
+		return;
+	}
 	
 	movePowerups();
 }
@@ -213,7 +239,7 @@ function movePowerups()
 		powerup.y = powerup.y + powerup.dy;
 
 		// Powerup went off gameboard
-		if(powerup.y > 800)
+		if(powerup.y > 600)
 		{
 			fallingPowerups.splice(i, 1);
 		}
@@ -311,6 +337,14 @@ function spawnPowerup(brick)
 
 	// Add the new powerup to the fallingPowerups list so that it starts interacting
 	fallingPowerups.push(powerup);
+}
+
+function gameOver()
+{      
+	gameOverFlag = true;
+	var audio = document.getElementById("game_over");
+	audio.volume = 0.4;
+	audio.play();
 }
 
 // Helper functions
