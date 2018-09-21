@@ -1,4 +1,4 @@
-function CollisionManager(bricks, paddle, balls, fallingPowerups, walls)
+function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
 {
     // Private fields
     var defaultBallRadius = 5;
