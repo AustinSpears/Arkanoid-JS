@@ -1,15 +1,15 @@
-function MoveManager(paddle, ballsList, powerupsList)
+function MoveManager(paddle, balls, fallingPowerups)
 {
-    // Private variables
-    var playerPaddle = paddle;
-    var balls = ballsList;
-    var fallingPowerups = powerupsList;
+    // Private fields
+    // var paddle = paddle;
+    // var balls = ballsList;
+    // var fallingPowerups = powerupsList;
 
     // Public methods
     this.moveAll = function()
     {
         // Move the paddle
-        playerPaddle.move();
+        paddle.move();
 
         // Move the balls
         balls.forEach(function(ball)

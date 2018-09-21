@@ -1,13 +1,5 @@
-function DrawManager(drawingContext, brickCollection, playerPaddle, ballCollection, powerupCollection)
+function DrawManager(ctx, bricks, paddle, balls, fallingPowerups)
 {
-    // Private variables
-    var ctx = drawingContext;
-    var bricks = brickCollection;
-    var paddle = playerPaddle;
-    var balls = ballCollection;
-    var fallingPowerups = powerupCollection;
-
-
     // Public methods
     this.drawStatic = function()
     {
