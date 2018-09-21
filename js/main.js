@@ -1,7 +1,7 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
 require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup'], function(){
-	
+
 // Get the canvas
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -16,7 +16,7 @@ var requestAnimFrame =
         function(callback)
         {
             window.setTimeout(callback, 1000/60);
-        };
+		};
 
 // Add mousemove and mousedown events to the canvas
 canvas.addEventListener("mousemove", trackMouse, true);
@@ -30,6 +30,7 @@ const MAXBOUNCEANGLE = Math.PI / 12;
 var playerPaddle = new Paddle(canvas, mouse);
 var gameOverFlag = false;
 var gameFrameID = null;
+var defaultBallRadius = 5;
 
 // Create the walls
 var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
@@ -37,16 +38,18 @@ var rightWall = new Wall(canvas.width, 0, 0, canvas.height, "right", ctx);
 var topWall = new Wall(0,0, canvas.width, 0, "top", ctx);
 var walls = [leftWall, rightWall, topWall];
 
-// Create the ball
-var ballRadius = 5;
-initBallPosition();
-
 // Create the brick array
 var brickArray;
 initBrickArray();
 
 // Create the powerup list
 var fallingPowerups = [];
+
+// Create list for extra balls from the MultiBall powerup
+var balls = [];
+
+// Create the balls (only 1 with no powerups)
+initBalls();
 
 // Start the game!
 init();
@@ -65,7 +68,7 @@ function restartGame()
 {
 	gameOverFlag = false;
 	initPaddle();
-	initBallPosition();
+	initBalls();
 	initBrickArray();
 	initPowerups();
 	init();
@@ -80,11 +83,14 @@ function restartGame()
 // ======================== FUNCTIONS START ===================
 
 // State initialization
-function initBallPosition()
+function initBalls()
 {
-	xPosition = canvas.width / 2 - ballRadius;
-	yPosition = canvas.height / 2 - ballRadius;
-	mainBall = new Ball(xPosition, yPosition, ballRadius, ctx);
+	// Clear the balls list
+	balls.length = 0;
+
+	xPosition = canvas.width / 2 - defaultBallRadius;
+	yPosition = canvas.height / 2 - defaultBallRadius;
+	balls.push(new Ball(xPosition, yPosition, defaultBallRadius, ctx));
 }
 
 function initBrickArray()
@@ -183,7 +189,13 @@ function drawStatic()
 function drawNonStatic()
 {
     playerPaddle.draw(ctx);
-	mainBall.draw(ctx);
+
+	// Draw any extra balls
+	balls.forEach(function(ball)
+	{
+		ball.draw(ctx);
+	});
+
 	drawPowerups();
 }
 
@@ -218,11 +230,24 @@ function moveObjects()
 {
     // Move the paddle
     playerPaddle.move();
-    
-    // Move the ball
-	mainBall.move();
 
-	if(mainBall.y > 600)
+	// Move the balls
+	balls.forEach(function(ball)
+	{
+		ball.move();
+	});
+
+	// Eliminate balls that went off the canvas
+	for(i = balls.length - 1; i >= 0; i--)
+	{
+		if(balls[i].y > canvas.height)
+		{
+			balls.splice(i, 1);
+		}
+	}
+
+	// All balls fell off the screen
+	if(balls.length == 0)
 	{
 		gameOver();
 		return;
@@ -239,7 +264,7 @@ function movePowerups()
 		powerup.y = powerup.y + powerup.dy;
 
 		// Powerup went off gameboard
-		if(powerup.y > 600)
+		if(powerup.y > canvas.height)
 		{
 			fallingPowerups.splice(i, 1);
 		}
@@ -249,8 +274,11 @@ function movePowerups()
 // Collision
 function collideObjects()
 {
-    // Try to collide with the paddle
-	playerPaddle.collideBall(mainBall);
+	// Try to collide with the paddle
+	balls.forEach(function(ball)
+	{
+		playerPaddle.collideBall(ball);
+	});
 	
 	// Try to collide with any active powerups
 	for(i = fallingPowerups.length - 1; i >= 0; i--)
@@ -266,14 +294,20 @@ function collideObjects()
     // Try to collide with the walls
     for(i = 0; i < walls.length; i++)
     {
-        walls[i].collide(mainBall);
+		balls.forEach(function(ball)
+		{
+			walls[i].collide(ball);
+		}); 
 	}
 
-    // Try to collide with the bricks
-	collideWithBricks();
+	// Try to collide with the bricks
+	balls.forEach(function(ball)
+	{
+		collideWithBricks(ball);
+	});
 }
 
-function collideWithBricks()
+function collideWithBricks(ball)
 {
 	var closestBrick = null;
 	var closestDist = 99999;
@@ -290,13 +324,13 @@ function collideWithBricks()
 			}
 
 			// No collision so skip
-			if(!brickArray[i][j].collide(mainBall))
+			if(!brickArray[i][j].collide(ball))
 			{
 				continue;
 			}
 			
 			// update the min brick
-			var currDist = distanceBetweenBrickAndBall(currBrick, mainBall);
+			var currDist = distanceBetweenBrickAndBall(currBrick, ball);
 			if(currDist < closestDist)
 			{
 				closestDist = currDist;
@@ -308,7 +342,7 @@ function collideWithBricks()
 	// Found a brick to rebound from!
 	if(closestBrick != null)
 	{
-		closestBrick.rebound(mainBall);
+		closestBrick.rebound(ball);
 		
 		spawnPowerup(closestBrick);
 	}
@@ -322,6 +356,38 @@ function applyPowerup(powerup)
 		case powertypes.BIGPADDLE:
 		playerPaddle.applyPowerup(powertypes.BIGPADDLE);
 		break;
+
+		case powertypes.MULTIBALL:
+		if(balls.length == 1)
+		{
+			var ball = balls[0];
+			var len = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+			var mainAngle = Math.atan2(ball.dy, ball.dx) * 180 / Math.PI;
+
+			// Spawn second ball at an angle 20 degrees less than the main ball
+			var angle1 = mainAngle - 20;
+			var theta1 = angle1 * Math.PI / 180;
+			var dx1 = len * Math.cos(theta1);
+			var dy1 = len * Math.sin(theta1);
+
+			// Spawn the third ball at an angle 20 degress more than the main ball
+			var angle2 = mainAngle + 20;
+			var theta2 = angle2 * Math.PI / 180;
+			var dx2 = len * Math.cos(theta2);
+			var dy2 = len * Math.sin(theta2);
+
+			// Push the new balls into the collection
+			var ball1 = new Ball(ball.x, ball.y, defaultBallRadius, ctx);
+			ball1.dx = dx1;
+			ball1.dy = dy1;
+			balls.push(ball1);
+
+			var ball2 = new Ball(ball.x, ball.y, defaultBallRadius, ctx);
+			ball2.dx = dx2;
+			ball2.dy = dy2;
+			balls.push(ball2);
+		}
+		break;
 	}
 }
 
@@ -332,7 +398,20 @@ function spawnPowerup(brick)
 		return;
 
 	// Init the new powerup - todo: randomize this once there are more powerups
-	var powerup = new Powerup(powertypes.BIGPADDLE, ctx)
+	var randomPower = Math.floor(Math.random() * 2);
+	var powerType;
+	switch(randomPower)
+	{
+		case 0:
+		powerType = powertypes.BIGPADDLE;
+		break;
+
+		case 1:
+		powerType = powertypes.MULTIBALL;
+		break;
+	}
+
+	var powerup = new Powerup(powerType, ctx)
 	powerup.init(brick);
 
 	// Add the new powerup to the fallingPowerups list so that it starts interacting
@@ -359,6 +438,19 @@ function distance(x1, y1, x2, y2)
 function distanceBetweenBrickAndBall(brick, ball)
 {
 	return distance(brick.centerX, brick.centerY, ball.x, ball.y);
+}
+
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+	if (w < 2 * r) r = w / 2;
+	if (h < 2 * r) r = h / 2;
+	this.beginPath();
+	this.moveTo(x+r, y);
+	this.arcTo(x+w, y,   x+w, y+h, r);
+	this.arcTo(x+w, y+h, x,   y+h, r);
+	this.arcTo(x,   y+h, x,   y,   r);
+	this.arcTo(x,   y,   x+w, y,   r);
+	this.closePath();
+	return this;
 }
 
 // ======================== FUNCTIONS END =====================

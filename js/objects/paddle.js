@@ -40,7 +40,7 @@ function Paddle(canvas, mouse)
     this.draw = function(ctx)
     {
         ctx.fillStyle = this.c;
-        ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.roundRect(this.x, this.y, this.w, this.h, 5).fill();
     };
 
     this.collidePowerup = function(powerup)
