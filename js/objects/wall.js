@@ -62,14 +62,5 @@ function Wall(x, y, width, height, orientation, drawingContext)
             ball.y = this.y + this.h + ball.r;
             break;
         }
-
-        this.sound_hit();
     };
-
-    this.sound_hit = function()
-    {      
-        var audio = document.getElementById("hit_wall");
-        audio.volume = 0.4;
-        audio.play();
-    }
 }
