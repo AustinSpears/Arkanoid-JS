@@ -1,10 +1,5 @@
 function MoveManager(paddle, balls, fallingPowerups)
 {
-    // Private fields
-    // var paddle = paddle;
-    // var balls = ballsList;
-    // var fallingPowerups = powerupsList;
-
     // Public methods
     this.moveAll = function()
     {
