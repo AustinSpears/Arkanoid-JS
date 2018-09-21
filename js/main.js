@@ -73,9 +73,7 @@ function restartGame()
 	initPowerups();
 	init();
 
-	var audio = document.getElementById("game_start");
-	audio.volume = 0.4;
-	audio.play();
+	playAudio("game_start", 0.4);
 }
 
 // ======================== EVENTS END ========================
@@ -386,6 +384,8 @@ function applyPowerup(powerup)
 			ball2.dx = dx2;
 			ball2.dy = dy2;
 			balls.push(ball2);
+
+			playAudio("powerup_multiBall", 0.2);
 		}
 		break;
 	}
@@ -421,9 +421,7 @@ function spawnPowerup(brick)
 function gameOver()
 {      
 	gameOverFlag = true;
-	var audio = document.getElementById("game_over");
-	audio.volume = 0.4;
-	audio.play();
+	playAudio("game_over", 0.4);
 }
 
 // Helper functions
@@ -438,6 +436,13 @@ function distance(x1, y1, x2, y2)
 function distanceBetweenBrickAndBall(brick, ball)
 {
 	return distance(brick.centerX, brick.centerY, ball.x, ball.y);
+}
+
+function playAudio(elementId, volume)
+{
+	var audio = document.getElementById(elementId);
+	audio.volume = volume;
+	audio.play();
 }
 
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {

@@ -68,22 +68,22 @@ function Brick(x, y, width, height)
 	// Determine the side the ball is hitting to produce the normal vector
 	this.rebound = function(ball)
 	{
-		// Hit from below
+		// Hit from above
 		if(ball.y <= this.y + this.h)
 		{
 			ball.dy = ball.dy * -1;
             
-            // Move the ball out of the brick
-            //ball.y = this.y + this.h + ball.r;
+			// Move the ball out of the brick
+			ball.y = this.y - ball.r;
 		}
 
-		// Hit was from above the brick
+		// Hit was from below the brick
 		else if(ball.y >= this.y)
 		{
 			ball.dy = ball.dy * -1;
 
 			// Move the ball out of the brick
-			//ball.y = this.y - ball.r;
+			ball.y = this.y + this.h + ball.r;
 		}
   		
 		// Hit was on left
@@ -92,7 +92,7 @@ function Brick(x, y, width, height)
 			ball.dx = ball.dx * -1;
 
 			// Move the ball out of the brick
-			//ball.x = this.x - ball.r;
+			ball.x = this.x - ball.r;
 		}
   		
 		// Hit was on right
@@ -101,7 +101,7 @@ function Brick(x, y, width, height)
 			ball.dx = ball.dx * -1;
 
 			// Move the ball out of the brick
-			//ball.x = this.x + this.w + ball.r;
+			ball.x = this.x + this.w + ball.r;
 		}	
 		
 		// Brick is now broken!
