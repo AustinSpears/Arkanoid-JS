@@ -24,6 +24,15 @@ canvas.addEventListener("mousemove", trackMouse, true);
 // Hook up restart event
 document.getElementById("restartButton").onclick = restartGame;
 
+// Start the music
+var gameMusic = document.getElementById("music_ending");
+gameMusic.volume = 0.1;
+gameMusic.addEventListener('ended', function(){
+	this.currentTime = 0;
+	this.play();
+}, false);
+gameMusic.play();
+
 // Declare game objects
 mouse = {};
 const MAXBOUNCEANGLE = Math.PI / 12;
@@ -72,8 +81,8 @@ function restartGame()
 	initBrickArray();
 	initPowerups();
 	init();
-
 	playAudio("game_start", 0.4);
+	musicRestart();
 }
 
 // ======================== EVENTS END ========================
@@ -152,6 +161,12 @@ function init()
 
 function update()
 {  
+	// If the music hasn't started, kick it on (chrome auto-play workaround)
+	if(gameMusic.paused)
+	{
+		musicRestart();
+	}
+
     // Keep canvas size up to date - todo scaling
     //ctx.canvas.width = window.innerWidth;
     //ctx.canvas.height = window.innerHeight;
@@ -443,6 +458,18 @@ function playAudio(elementId, volume)
 	var audio = document.getElementById(elementId);
 	audio.volume = volume;
 	audio.play();
+}
+
+function musicStop()
+{
+	gameMusic.pause();
+	gameMusic.currentTime = 0;
+}
+
+function musicRestart()
+{
+	musicStop();
+	gameMusic.play();
 }
 
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
