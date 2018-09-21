@@ -1,6 +1,6 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
-require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup', 'managers/movemanager'], function(){
+require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup', 'managers/movemanager', 'managers/drawmanager'], function(){
 
 // Get the canvas
 var canvas = document.getElementById("canvas");
@@ -36,7 +36,7 @@ gameMusic.play();
 // Declare game objects
 mouse = {};
 const MAXBOUNCEANGLE = Math.PI / 12;
-var playerPaddle = new Paddle(canvas, mouse);
+var paddle = new Paddle(canvas, mouse);
 var gameOverFlag = false;
 var gameFrameID = null;
 var defaultBallRadius = 5;
@@ -48,7 +48,7 @@ var topWall = new Wall(0,0, canvas.width, 0, "top", ctx);
 var walls = [leftWall, rightWall, topWall];
 
 // Create the brick array
-var brickArray;
+var bricks;
 initBrickArray();
 
 // Create the powerup list
@@ -62,6 +62,7 @@ initBalls();
 
 // Create the manager objects
 var moveManager;
+var drawManager;
 
 // Start the game!
 init();
@@ -107,7 +108,7 @@ function initBrickArray()
 {
 	// Create a 2d array the size of the canvas
 	// Canvas dimensions: 800x600
-	brickArray = [];
+	bricks = [];
 	var brickHeight = 20;
 	
 	// Make board 10 bricks wide
@@ -119,13 +120,13 @@ function initBrickArray()
 	// Create spots for the bricks
 	for(var i = 0; i < arrayWidth; i++)
 	{
-		brickArray[i] = [];
+		bricks[i] = [];
 		for(var j = 0; j < arrayHeight; j++)
 		{
 			var x = i * brickWidth;
 			var y = j * brickHeight;
 
-			brickArray[i][j] = new Brick(x, y, brickWidth, brickHeight);
+			bricks[i][j] = new Brick(x, y, brickWidth, brickHeight);
 		}	
 	}
 	
@@ -134,7 +135,7 @@ function initBrickArray()
 	{
 		for(var j = 0; j < 8; j++)
 		{
-			brickArray[i][j].broken = false;
+			bricks[i][j].broken = false;
 		}
 	}
 }
@@ -146,7 +147,7 @@ function initPowerups()
 
 function initPaddle()
 {
-	playerPaddle = new Paddle(canvas, mouse);
+	paddle = new Paddle(canvas, mouse);
 }
 
 // Game Loop
@@ -159,7 +160,8 @@ function init()
 	}
 
 	// Init the managers
-	moveManager = new MoveManager(playerPaddle, balls, fallingPowerups);
+	moveManager = new MoveManager(paddle, balls, fallingPowerups);
+	drawManager = new DrawManager(ctx, bricks, paddle, balls, fallingPowerups);
 
     // Start frame loop
     gameFrameID = requestAnimFrame(update);
@@ -177,10 +179,10 @@ function update()
     //ctx.canvas.width = window.innerWidth;
     //ctx.canvas.height = window.innerHeight;
     
-    // Draw the static objects
-    drawStatic();
+	// Draw the static objects
+	drawManager.drawStatic();
     
-    // Move the paddle, balls, and powerups
+    // Move the objects
 	moveManager.moveAll();
 
 	// All balls fell off the screen
@@ -191,59 +193,13 @@ function update()
 	}
     
     // Check for and handle collisions
-    collideObjects();
-    
-    // Draw the paddle and ball
-    drawNonStatic();
+	collideObjects();
+	
+	// Draw the non-static objects
+	drawManager.drawNonStatic();
         
     // Recursive Step
 	requestAnimFrame(update);
-}
-
-// Drawing
-function drawStatic()
-{
-    drawCanvas();
-    drawBricks();
-}
-
-function drawNonStatic()
-{
-    playerPaddle.draw(ctx);
-
-	// Draw any extra balls
-	balls.forEach(function(ball)
-	{
-		ball.draw(ctx);
-	});
-
-	drawPowerups();
-}
-
-function drawCanvas()
-{
-    ctx.fillStyle = "black";
-    ctx.fillRect(0,0, window.innerWidth, window.innerHeight);
-}
-
-function drawPowerups()
-{
-	// Iterate through and draw the powerups
-	fallingPowerups.forEach(function(powerup){
-		powerup.draw(ctx);
-	});
-}
-
-function drawBricks()
-{
-	// Go through the brick array and draw any non-broken bricks
-	for(i = 0; i < brickArray.length; i++)
-	{
-		for(j = 0; j < brickArray[0].length; j++)
-		{
-			brickArray[i][j].draw(ctx);		
-		}
-	}
 }
 
 // Collision
@@ -252,14 +208,14 @@ function collideObjects()
 	// Try to collide with the paddle
 	balls.forEach(function(ball)
 	{
-		playerPaddle.collideBall(ball);
+		paddle.collideBall(ball);
 	});
 	
 	// Try to collide with any active powerups
 	for(i = fallingPowerups.length - 1; i >= 0; i--)
 	{
 		var powerup = fallingPowerups[i];
-		if(playerPaddle.collidePowerup(powerup))
+		if(paddle.collidePowerup(powerup))
 		{
 			applyPowerup(powerup);
 			fallingPowerups.splice(i, 1);
@@ -286,11 +242,11 @@ function collideWithBricks(ball)
 {
 	var closestBrick = null;
 	var closestDist = 99999;
-	for(i = 0; i < brickArray.length; i++)
+	for(i = 0; i < bricks.length; i++)
 	{
-		for(j = 0; j < brickArray[0].length; j++)
+		for(j = 0; j < bricks[0].length; j++)
 		{
-			var currBrick = brickArray[i][j];
+			var currBrick = bricks[i][j];
 
 			// Brick is already broken so skip
 			if(currBrick.broken)
@@ -299,7 +255,7 @@ function collideWithBricks(ball)
 			}
 
 			// No collision so skip
-			if(!brickArray[i][j].collide(ball))
+			if(!bricks[i][j].collide(ball))
 			{
 				continue;
 			}
@@ -329,7 +285,7 @@ function applyPowerup(powerup)
 	switch(powerup.power)
 	{
 		case powertypes.BIGPADDLE:
-		playerPaddle.applyPowerup(powertypes.BIGPADDLE);
+		paddle.applyPowerup(powertypes.BIGPADDLE);
 		break;
 
 		case powertypes.MULTIBALL:
