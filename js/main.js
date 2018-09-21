@@ -1,6 +1,6 @@
 // =========================== GAME LOGIC ===================================== 
 // Import Classes
-require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup'], function(){
+require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup', 'managers/movemanager'], function(){
 
 // Get the canvas
 var canvas = document.getElementById("canvas");
@@ -59,6 +59,9 @@ var balls = [];
 
 // Create the balls (only 1 with no powerups)
 initBalls();
+
+// Create the manager objects
+var moveManager;
 
 // Start the game!
 init();
@@ -155,6 +158,9 @@ function init()
 		cancelAnimationFrame(gameFrameID);
 	}
 
+	// Init the managers
+	moveManager = new MoveManager(playerPaddle, balls, fallingPowerups);
+
     // Start frame loop
     gameFrameID = requestAnimFrame(update);
 }
@@ -174,11 +180,13 @@ function update()
     // Draw the static objects
     drawStatic();
     
-    // Move the paddle and ball
-	moveObjects();
-	
-	if(gameOverFlag == true)
+    // Move the paddle, balls, and powerups
+	moveManager.moveAll();
+
+	// All balls fell off the screen
+	if(balls.length == 0)
 	{
+		gameOver();
 		return;
 	}
     
@@ -234,52 +242,6 @@ function drawBricks()
 		for(j = 0; j < brickArray[0].length; j++)
 		{
 			brickArray[i][j].draw(ctx);		
-		}
-	}
-}
-
-// Movement
-function moveObjects()
-{
-    // Move the paddle
-    playerPaddle.move();
-
-	// Move the balls
-	balls.forEach(function(ball)
-	{
-		ball.move();
-	});
-
-	// Eliminate balls that went off the canvas
-	for(i = balls.length - 1; i >= 0; i--)
-	{
-		if(balls[i].y > canvas.height)
-		{
-			balls.splice(i, 1);
-		}
-	}
-
-	// All balls fell off the screen
-	if(balls.length == 0)
-	{
-		gameOver();
-		return;
-	}
-	
-	movePowerups();
-}
-
-function movePowerups()
-{
-	for(i = fallingPowerups.length - 1; i >= 0; i--)
-	{
-		var powerup = fallingPowerups[i];
-		powerup.y = powerup.y + powerup.dy;
-
-		// Powerup went off gameboard
-		if(powerup.y > canvas.height)
-		{
-			fallingPowerups.splice(i, 1);
 		}
 	}
 }
