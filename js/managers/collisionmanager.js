@@ -44,6 +44,8 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
     {
         var closestBrick = null;
         var closestDist = 99999;
+        var closestBricki = 0;
+        var closestBrickj = 0;
         for(i = 0; i < bricks.length; i++)
         {
             for(j = 0; j < bricks[0].length; j++)
@@ -68,6 +70,8 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 {
                     closestDist = currDist;
                     closestBrick = currBrick;
+                    closestBricki = i;
+                    closestBrickj = j;
                 }
             }
         }
@@ -80,6 +84,35 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
             if(closestBrick.broken)
             {
                 spawnPowerup(closestBrick);
+            }
+
+            // Explode the bricks around the closest brick
+            if(ball.onFire)
+            {
+                ball.stopFire();
+
+                var explodeBricks = [];
+                // i - 1
+                explodeBricks.push(bricks[Math.max(0, closestBricki -1)][closestBrickj]);
+
+                // i + 1
+                explodeBricks.push(bricks[Math.min(bricks.length, closestBricki + 1)][closestBrickj]);
+
+                // j - 1
+                explodeBricks.push(bricks[closestBricki][Math.max(0, closestBrickj - 1)])
+
+                // j + 1
+                explodeBricks.push(bricks[closestBricki][Math.min(bricks[0].length, closestBrickj + 1)])
+
+                explodeBricks.forEach(function(xBrick)
+                {
+                    if(xBrick.brickType != bricktypes.GOLD)
+                    {
+                        xBrick.broken = true;
+                    }
+                });
+
+                playAudio("explosion", 0.3);
             }
         }
     }
@@ -126,6 +159,13 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 playAudio("powerup_multiBall", 0.2);
             }
             break;
+
+            case powertypes.FIREBALL:
+            // Set fire to the balls
+            balls.forEach(function(ball){
+                ball.setFire();
+            })
+            break;
         }
     }
 
@@ -136,7 +176,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
             return;
 
         // Init the new powerup - todo: randomize this once there are more powerups
-        var randomPower = Math.floor(Math.random() * 2);
+        var randomPower = Math.floor(Math.random() * 3);
         var powerType;
         switch(randomPower)
         {
@@ -146,6 +186,10 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
 
             case 1:
             powerType = powertypes.MULTIBALL;
+            break;
+
+            case 2:
+            powerType = powertypes.FIREBALL;
             break;
         }
 

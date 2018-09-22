@@ -128,10 +128,20 @@ function Brick(x, y, width, height)
 		switch(this.brickType)
 		{
 			case bricktypes.NORMAL:
+				if(ball.onFire)
+				{
+					this.broken = true;
+					return;
+				}
 				this.broken = true;
 				playAudio("hit_brick", 0.2);
 			break;
 			case bricktypes.SILVER:
+				if(ball.onFire)
+				{
+					this.broken = true;
+					return;
+				}
 				this.numHits++;
 				if(this.numHits >= this.hitsToBreak)
 				{
@@ -140,6 +150,10 @@ function Brick(x, y, width, height)
 				playAudio("hit_brick_silver", 0.2);
 			break;
 			case bricktypes.GOLD:
+				if(ball.onFire)
+				{
+					return;
+				}
 				playAudio("hit_brick_silver", 0.2);
 			break;
 		}

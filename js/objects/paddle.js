@@ -13,10 +13,10 @@ function Paddle(canvas, mouse)
         switch(power)
         {
             case powertypes.BIGPADDLE:
-            if(!this.big)
-            {
-                this.grow();
-            }
+                if(!this.big)
+                {
+                    this.grow();
+                }
             break;
         }
     }

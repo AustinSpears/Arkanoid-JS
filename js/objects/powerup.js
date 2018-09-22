@@ -1,6 +1,7 @@
 const powertypes = {
     BIGPADDLE: 'bigpaddle',
-    MULTIBALL: 'multiball'
+    MULTIBALL: 'multiball',
+    FIREBALL: 'fireball'
 }
 
 function Powerup(powerType)
@@ -31,10 +32,13 @@ function Powerup(powerType)
         switch(this.power)
         {
             case powertypes.BIGPADDLE:
-            this.color = "steelblue";
+                this.color = "steelblue";
             break;
             case powertypes.MULTIBALL:
-            this.color = "pink";
+                this.color = "darkgreen";
+            break;
+            case powertypes.FIREBALL:
+                this.color = "red"
             break;
         }
     }

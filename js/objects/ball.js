@@ -7,6 +7,7 @@ function Ball(xPosition, yPosition, radius)
     this.dx = 0;
     this.dy = 4;
     this.numCollisions = 0;
+    this.onFire = false;
     
     this.bottom = function()
     {
@@ -27,6 +28,31 @@ function Ball(xPosition, yPosition, radius)
     {
         return this.x + this.r;  
     };
+
+    this.applyPowerup = function(power)
+    {
+        switch(power)
+        {
+            case powertypes.FIREBALL:
+                this.setFire();
+                break;
+            default:
+                this.stopFire();
+            break;
+        }
+    }
+
+    this.setFire = function()
+    {
+        this.onFire = true;
+        this.c = "red";
+    }
+
+    this.stopFire = function()
+    {
+        this.onFire = false;
+        this.c = "white";
+    }
     
     this.move = function()
     {
