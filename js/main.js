@@ -3,6 +3,13 @@
 require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'objects/powerup', 
 	'managers/movemanager', 'managers/drawmanager', 'managers/collisionmanager', 'managers/objectmanager'], function(){
 
+// Modify the object prototype to allow for any object to call playAudio
+Object.prototype.playAudio = function(elementId, volume) {
+	var audio = document.getElementById(elementId);
+	audio.volume = volume;
+	audio.play();
+}
+
 // Get the canvas
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -76,7 +83,6 @@ function gameStart()
 	
 	// Play the start noise and kick on the music
 	playAudio("game_start", 0.4);
-	musicRestart();
 }
 
 function gameLoop()
@@ -112,40 +118,15 @@ function gameLoop()
 
 function gameOver()
 {
-	playAudio("game_over", 0.4);
-}
-
-// Audio functions
-function playAudio(elementId, volume)
-{
-	var audio = document.getElementById(elementId);
-	audio.volume = volume;
-	audio.play();
-}
-
-function musicStop()
-{
 	gameMusic.pause();
-	gameMusic.currentTime = 0;
+	playAudio("game_over", 0.4);
 }
 
 function musicRestart()
 {
-	musicStop();
+	gameMusic.pause();
+	gameMusic.currentTime = 0;
 	gameMusic.play();
-}
-
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-	if (w < 2 * r) r = w / 2;
-	if (h < 2 * r) r = h / 2;
-	this.beginPath();
-	this.moveTo(x+r, y);
-	this.arcTo(x+w, y,   x+w, y+h, r);
-	this.arcTo(x+w, y+h, x,   y+h, r);
-	this.arcTo(x,   y+h, x,   y,   r);
-	this.arcTo(x,   y,   x+w, y,   r);
-	this.closePath();
-	return this;
 }
 
 // ======================== FUNCTIONS END =====================

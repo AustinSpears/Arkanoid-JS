@@ -26,7 +26,7 @@ function Paddle(canvas, mouse)
         this.w = this.w * 2;
         this.x = this.x - this.w / 4;
         this.big = true;
-        this.sound_expand();
+        playAudio("powerup_bigPaddle", 0.2);
     }
  
     this.move = function()
@@ -85,7 +85,7 @@ function Paddle(canvas, mouse)
             return;
             
         this.rebound(ball);
-        this.sound_hit();
+        playAudio("hit_paddle", 0.1);
     };
 
     this.rebound = function(ball)
@@ -103,18 +103,4 @@ function Paddle(canvas, mouse)
         
         ball.y = this.y - ball.r - 1;
     };
-
-    this.sound_hit = function()
-    {      
-        var audio = document.getElementById("hit_paddle");
-        audio.volume = 0.1;
-        audio.play();
-    }
-
-    this.sound_expand = function()
-    {      
-        var audio = document.getElementById("powerup_bigPaddle");
-        audio.volume = 0.2;
-        audio.play();
-    }
 };
