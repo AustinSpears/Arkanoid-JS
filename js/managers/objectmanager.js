@@ -13,26 +13,25 @@ function ObjectManager(ctx, canvas, mouse)
     // Public methods
     this.initAll = function()
     {
-        this.initPaddle();
-        this.initWalls();
-        this.initBricks();
-        this.initBalls();
-        this.initPowerups();
+        initPaddle.call(this);
+        initWalls.call(this)
+        initBricks.call(this);
+        initBalls.call(this);
+        initPowerups.call(this);
     }
 
-    // These should not be called from the outside, but I had to declare them public
-    // so that they could properly initialize the public fields
-    this.initPaddle = function()
+    // Private methods
+    function initPaddle()
     {
         this.paddle = new Paddle(canvas, mouse);
     }
 
-    this.initPowerups = function()
+    function initPowerups()
     {
         this.fallingPowerups = [];
     }
 
-    this.initBalls = function()
+    function initBalls()
     {
         // Clear the balls list
         this.balls = [];
@@ -41,7 +40,7 @@ function ObjectManager(ctx, canvas, mouse)
         this.balls.push(new Ball(xPosition, yPosition, defaultBallRadius, ctx));
     }
 
-    this.initWalls = function()
+    function initWalls()
     {
         var leftWall = new Wall(0,0,0, canvas.height, "left", ctx);
         var rightWall = new Wall(canvas.width, 0, 0, canvas.height, "right", ctx);
@@ -49,7 +48,7 @@ function ObjectManager(ctx, canvas, mouse)
         this.walls = [leftWall, rightWall, topWall];
     }
 
-    this.initBricks = function()
+    function initBricks()
     {
         // Create a 2d array the size of the canvas
         // Canvas dimensions: 800x600
