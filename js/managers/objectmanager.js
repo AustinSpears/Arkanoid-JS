@@ -70,17 +70,38 @@ function ObjectManager(ctx, canvas, mouse)
                 var x = i * brickWidth;
                 var y = j * brickHeight;
 
-                this.bricks[i][j] = new Brick(x, y, brickWidth, brickHeight);
+                this.bricks[i][j] = new Brick(x, y, brickWidth, brickHeight, "green");
             }	
         }
         
-        // Turn on the first 5 rows of bricks
-        for(var i = 0; i < arrayWidth; i++)
+
+        // Enable and color some of the bricks
+        for(var i = 2; i < 8; i++)
         {
-            for(var j = 0; j < 8; j++)
+            var rowColor = randomColor();
+            for(var j = 0; j < arrayWidth; j++)
             {
-                this.bricks[i][j].broken = false;
+                this.bricks[j][i].broken = false;
+                this.bricks[j][i].c = rowColor;
             }
+        }
+    }
+
+    function randomColor()
+    {
+        var colorInt = Math.floor(Math.random() * 5);
+        switch(colorInt)
+        {
+            case 0:
+                return "DarkGreen";
+            case 1:
+                return "SteelBlue"
+            case 2:
+                return "SlateBlue"
+            case 3:
+                return "SeaGreen"
+            case 4:
+                return "DarkCyan"
         }
     }
 }

@@ -1,10 +1,10 @@
-function Brick(x, y, width, height)
+function Brick(x, y, width, height, color)
 {
 	this.x = x;
 	this.y = y;
 	this.w = width;
 	this.h = height;
-	this.c = "green";
+	this.c = color;
 	this.broken = true;
 
 	// Return center point
