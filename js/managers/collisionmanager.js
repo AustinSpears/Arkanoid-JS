@@ -77,7 +77,10 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
         {
             closestBrick.rebound(ball);
             
-            spawnPowerup(closestBrick);
+            if(closestBrick.broken)
+            {
+                spawnPowerup(closestBrick);
+            }
         }
     }
 
