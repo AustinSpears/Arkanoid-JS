@@ -70,13 +70,13 @@ function ObjectManager(ctx, canvas, mouse)
                 var x = i * brickWidth;
                 var y = j * brickHeight;
 
-                this.bricks[i][j] = new Brick(x, y, brickWidth, brickHeight, "green");
+                this.bricks[i][j] = new Brick(x, y, brickWidth, brickHeight);
             }	
         }
         
-
+        var topRow = 2;
         // Enable and color some of the bricks
-        for(var i = 2; i < 8; i++)
+        for(var i = topRow; i < 8; i++)
         {
             var rowColor = randomColor();
             for(var j = 0; j < arrayWidth; j++)
@@ -84,6 +84,12 @@ function ObjectManager(ctx, canvas, mouse)
                 this.bricks[j][i].broken = false;
                 this.bricks[j][i].c = rowColor;
             }
+        }
+
+        // Make the top row into silver bricks
+        for(var i = 0; i < arrayWidth; i++)
+        {
+            this.bricks[i][topRow].setSilver();
         }
     }
 
@@ -95,13 +101,13 @@ function ObjectManager(ctx, canvas, mouse)
             case 0:
                 return "DarkGreen";
             case 1:
-                return "SteelBlue"
+                return "ForestGreen"
             case 2:
-                return "SlateBlue"
+                return "SaddleBrown"
             case 3:
-                return "SeaGreen"
+                return "DarkSeaGreen"
             case 4:
-                return "DarkCyan"
+                return "Peru"
         }
     }
 }

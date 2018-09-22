@@ -1,15 +1,37 @@
-function Brick(x, y, width, height, color)
+const bricktypes = {
+	NORMAL: 'normal',
+	SILVER: 'silver',
+	GOLD: 'gold'
+}
+
+function Brick(x, y, width, height)
 {
 	this.x = x;
 	this.y = y;
 	this.w = width;
 	this.h = height;
-	this.c = color;
+	this.c = "green";
 	this.broken = true;
+	this.brickType = bricktypes.NORMAL;
+	this.numHits = 0;
+	this.hitsToBreak = 1;
 
 	// Return center point
 	this.centerX = this.x + this.w / 2;
 	this.centerY = this.y + this.h / 2;
+
+	this.setSilver = function()
+	{
+		this.c = "DarkGray";
+		this.hitsToBreak = 2;
+		this.brickType = bricktypes.SILVER;
+	}
+
+	this.setGold = function()
+	{
+		this.c = "gold";
+		this.brickType = bricktypes.GOLD;
+	}
 
 	this.draw = function(ctx)
 	{
@@ -103,8 +125,23 @@ function Brick(x, y, width, height, color)
 			ball.y = this.y + this.h + ball.r;
 		}
 		
-		// Brick is now broken!
-		this.broken = true;
-		playAudio("hit_brick", 0.2);
+		switch(this.brickType)
+		{
+			case bricktypes.NORMAL:
+				this.broken = true;
+				playAudio("hit_brick", 0.2);
+			break;
+			case bricktypes.SILVER:
+				this.numHits++;
+				if(this.numHits >= this.hitsToBreak)
+				{
+					this.broken = true;
+				}
+				playAudio("hit_brick_silver", 0.2);
+			break;
+			case bricktypes.GOLD:
+				playAudio("hit_brick_silver", 0.2);
+			break;
+		}
 	}
 }
