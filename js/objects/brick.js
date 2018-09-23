@@ -134,7 +134,7 @@ function Brick(x, y, width, height)
 					return;
 				}
 				this.broken = true;
-				playAudio("hit_brick", 0.2);
+				playAudio("sounds/Hit_Brick_Normal.wav", 0.2);
 			break;
 			case bricktypes.SILVER:
 				if(ball.onFire)
@@ -147,14 +147,14 @@ function Brick(x, y, width, height)
 				{
 					this.broken = true;
 				}
-				playAudio("hit_brick_silver", 0.2);
+				playAudio("sounds/Hit_Brick_Metallic.wav", 0.2);
 			break;
 			case bricktypes.GOLD:
 				if(ball.onFire)
 				{
 					return;
 				}
-				playAudio("hit_brick_silver", 0.2);
+				playAudio("sounds/Hit_Brick_Metallic.wav", 0.2);
 			break;
 		}
 	}

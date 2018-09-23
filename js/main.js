@@ -4,8 +4,8 @@ require(['objects/ball', 'objects/wall', 'objects/paddle', 'objects/brick', 'obj
 	'managers/movemanager', 'managers/drawmanager', 'managers/collisionmanager', 'managers/objectmanager'], function(){
 
 // Modify the object prototype to allow for any object to call playAudio
-Object.prototype.playAudio = function(elementId, volume) {
-	var audio = document.getElementById(elementId);
+Object.prototype.playAudio = function(fileName, volume) {
+	var audio = new Audio(fileName)
 	audio.volume = volume;
 	audio.play();
 }
@@ -42,7 +42,7 @@ function trackMouse(e)
 document.getElementById("restartButton").onclick = gameStart;
 
 // Start the music
-var gameMusic = document.getElementById("music_ending");
+var gameMusic = new Audio("sounds/Music_Main.mp3");
 gameMusic.volume = 0.1;
 gameMusic.addEventListener('ended', function(){
 	this.currentTime = 0;
@@ -82,7 +82,7 @@ function gameStart()
 	gameFrameID = requestAnimFrame(gameLoop);
 	
 	// Play the start noise and kick on the music
-	playAudio("game_start", 0.4);
+	playAudio("sounds/Game_Start.ogg", 0.4);
 }
 
 function gameLoop()
@@ -119,7 +119,7 @@ function gameLoop()
 function gameOver()
 {
 	gameMusic.pause();
-	playAudio("game_over", 0.4);
+	playAudio("sounds/Game_Over.wav", 0.4);
 }
 
 function musicRestart()

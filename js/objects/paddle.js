@@ -26,7 +26,7 @@ function Paddle(canvas, mouse)
         this.w = this.w * 2;
         this.x = this.x - this.w / 4;
         this.big = true;
-        playAudio("powerup_bigPaddle", 0.2);
+        playAudio("sounds/Powerup_BigPaddle.wav", 0.2);
     }
  
     this.move = function()
@@ -85,7 +85,7 @@ function Paddle(canvas, mouse)
             return;
             
         this.rebound(ball);
-        playAudio("hit_paddle", 0.1);
+        playAudio("sounds/Hit_Paddle.wav", 0.1);
     };
 
     this.rebound = function(ball)

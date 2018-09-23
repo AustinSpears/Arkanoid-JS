@@ -134,7 +134,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 ball2.dy = dy2;
                 balls.push(ball2);
 
-                playAudio("powerup_multiBall", 0.2);
+                playAudio("sounds/Powerup_MultiBall.wav", 0.2);
             }
             break;
 
@@ -144,7 +144,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 ball.setFire();
             });
 
-            playAudio("powerup_fireBall", 0.3);
+            playAudio("sounds/Powerup_FireBall.flac", 0.3);
             break;
         }
     }
@@ -202,7 +202,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
             }
         }
 
-        playAudio("explosion", 0.3);
+        playAudio("sounds/Explosion_Grainy.wav", 0.3);
     }
 
     // Helper functions
