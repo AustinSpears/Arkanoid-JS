@@ -218,11 +218,4 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
     {
         return distance(brick.centerX, brick.centerY, ball.x, ball.y);
     }
-
-    function playAudio(elementId, volume)
-    {
-        var audio = document.getElementById(elementId);
-        audio.volume = volume;
-        audio.play();
-    }
 }
