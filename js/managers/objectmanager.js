@@ -76,13 +76,12 @@ function ObjectManager(ctx, canvas, mouse)
         
         var topRow = 2;
         // Enable and color some of the bricks
-        for(var i = topRow; i < 8; i++)
+        for(var i = topRow; i < 12; i++)
         {
-            var rowColor = randomColor();
             for(var j = 0; j < arrayWidth; j++)
             {
                 this.bricks[j][i].broken = false;
-                this.bricks[j][i].c = rowColor;
+                this.bricks[j][i].c = rowColor(i);
             }
         }
 
@@ -93,6 +92,12 @@ function ObjectManager(ctx, canvas, mouse)
         }
     }
 
+    var colorArray = ["DarkGreen", "ForestGreen", "DarkSeaGreen"];
+    function rowColor(index)
+    {
+        return colorArray[index%colorArray.length];
+    }
+    
     function randomColor()
     {
         var colorInt = Math.floor(Math.random() * 5);
