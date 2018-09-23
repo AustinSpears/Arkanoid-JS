@@ -48,7 +48,6 @@ gameMusic.addEventListener('ended', function(){
 	this.currentTime = 0;
 	this.play();
 }, false);
-gameMusic.play();
 
 // Declare game objects
 var gameFrameID = null;
@@ -58,9 +57,6 @@ var objMngr = new ObjectManager(ctx, canvas, mouse);
 var moveManager;
 var drawManager;
 var collisionManager;
-
-// Start the game!
-gameStart();
 
 // ======================== FUNCTIONS START ===================
 
@@ -80,8 +76,6 @@ function gameStart()
 
     // Start frame loop
 	gameFrameID = requestAnimFrame(gameLoop);
-	
-	// Play the start noise and kick on the music
 	playAudio("sounds/Game_Start.ogg", 0.4);
 }
 
