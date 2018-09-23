@@ -68,6 +68,10 @@ function gameStart()
 		cancelAnimationFrame(gameFrameID);
 	}
 
+	// Hide the cursor and restart button
+	canvas.style.cursor = "none";
+	document.getElementById("restartButton").style.visibility = "hidden";
+
 	// Reset the objects to their default state
 	objMngr.initAll();
 	moveManager = new MoveManager(objMngr.paddle, objMngr.balls, objMngr.fallingPowerups);
@@ -114,6 +118,10 @@ function gameOver()
 {
 	gameMusic.pause();
 	playAudio("sounds/Game_Over.wav", 0.4);
+	
+	// Show the cursor and restart button
+	canvas.style.cursor = "default"
+	document.getElementById("restartButton").style.visibility = "visible";
 }
 
 function musicRestart()
