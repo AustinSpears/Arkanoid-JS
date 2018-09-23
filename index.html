@@ -3,22 +3,37 @@
   <style>
     h1 {
       color: white;
-      text-align: center;
+    }
+    .gameDiv{
+      display: grid;
+      align-items: center;
+      justify-items: center;
+    }
+    .gameCanvas{
+      grid-column: 1;
+      grid-row: 1;
     }
     .restartButton {
-      width:817px;
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+      background: black;
+      color: white;
+      width: 200px;
+      font-size: 24px;
     }
   </style>
   <head>
-    <title>Arkanoid</title>
+    <title>Bootleg Arkanoid</title>
     <link  rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <h1>Janky Arkanoid</h1>
-    <div>
-      <input class="restartButton" id="restartButton" type="button" value="Restart"/>
+    <h1>Bootleg Arkanoid</h1>
+    <div class="gameDiv">
+      <canvas class = "gameCanvas" id="canvas" width="800" height="600"></canvas>
+      <input class="restartButton" id="restartButton" type="button" value="INSERT COIN"/>
     </div>
-  	<canvas  id="canvas" width="800" height="600"></canvas>
+
     <script data-main="js/main" src="js/require.js"></script>
   </body>
 </html>
