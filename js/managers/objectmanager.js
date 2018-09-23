@@ -76,7 +76,7 @@ function ObjectManager(ctx, canvas, mouse)
         
         var topRow = 2;
         // Enable and color some of the bricks
-        for(var i = topRow; i < 12; i++)
+        for(var i = topRow; i < 9; i++)
         {
             for(var j = 0; j < arrayWidth; j++)
             {
@@ -97,7 +97,7 @@ function ObjectManager(ctx, canvas, mouse)
     {
         return colorArray[index%colorArray.length];
     }
-    
+
     function randomColor()
     {
         var colorInt = Math.floor(Math.random() * 5);

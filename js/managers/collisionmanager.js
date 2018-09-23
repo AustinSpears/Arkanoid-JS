@@ -90,29 +90,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
             if(ball.onFire)
             {
                 ball.stopFire();
-
-                var explodeBricks = [];
-                // i - 1
-                explodeBricks.push(bricks[Math.max(0, closestBricki -1)][closestBrickj]);
-
-                // i + 1
-                explodeBricks.push(bricks[Math.min(bricks.length - 1, closestBricki + 1)][closestBrickj]);
-
-                // j - 1
-                explodeBricks.push(bricks[closestBricki][Math.max(0, closestBrickj - 1)])
-
-                // j + 1
-                explodeBricks.push(bricks[closestBricki][Math.min(bricks[0].length - 1, closestBrickj + 1)])
-
-                explodeBricks.forEach(function(xBrick)
-                {
-                    if(xBrick.brickType != bricktypes.GOLD)
-                    {
-                        xBrick.broken = true;
-                    }
-                });
-
-                playAudio("explosion", 0.3);
+                explodeBricks(closestBricki, closestBrickj);
             }
         }
     }
@@ -200,6 +178,33 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
 
         // Add the new powerup to the fallingPowerups list so that it starts interacting
         fallingPowerups.push(powerup);
+    }
+
+    function explodeBricks(i, j)
+    {
+        var explodeBricks = [];
+
+        // i - 1
+        explodeBricks.push(bricks[Math.max(0, i - 1)][j]);
+
+        // i + 1
+        explodeBricks.push(bricks[Math.min(bricks.length - 1, i + 1)][j]);
+
+        // j - 1
+        explodeBricks.push(bricks[i][Math.max(0, j - 1)])
+
+        // j + 1
+        explodeBricks.push(bricks[i][Math.min(bricks[0].length - 1, j + 1)])
+
+        explodeBricks.forEach(function(xBrick)
+        {
+            if(xBrick.brickType != bricktypes.GOLD)
+            {
+                xBrick.broken = true;
+            }
+        });
+
+        playAudio("explosion", 0.3);
     }
 
     // Helper functions
