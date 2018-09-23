@@ -96,13 +96,13 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 explodeBricks.push(bricks[Math.max(0, closestBricki -1)][closestBrickj]);
 
                 // i + 1
-                explodeBricks.push(bricks[Math.min(bricks.length, closestBricki + 1)][closestBrickj]);
+                explodeBricks.push(bricks[Math.min(bricks.length - 1, closestBricki + 1)][closestBrickj]);
 
                 // j - 1
                 explodeBricks.push(bricks[closestBricki][Math.max(0, closestBrickj - 1)])
 
                 // j + 1
-                explodeBricks.push(bricks[closestBricki][Math.min(bricks[0].length, closestBrickj + 1)])
+                explodeBricks.push(bricks[closestBricki][Math.min(bricks[0].length - 1, closestBrickj + 1)])
 
                 explodeBricks.forEach(function(xBrick)
                 {
@@ -164,7 +164,9 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
             // Set fire to the balls
             balls.forEach(function(ball){
                 ball.setFire();
-            })
+            });
+
+            playAudio("powerup_fireBall", 0.3);
             break;
         }
     }
