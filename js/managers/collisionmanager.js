@@ -182,27 +182,25 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
 
     function explodeBricks(i, j)
     {
-        var explodeBricks = [];
+        var explosionRadius = 1;
 
-        // i - 1
-        explodeBricks.push(bricks[Math.max(0, i - 1)][j]);
+        var fromI = Math.max(0, i - explosionRadius);
+        var toI = Math.min(bricks.length - 1, i + explosionRadius);
 
-        // i + 1
-        explodeBricks.push(bricks[Math.min(bricks.length - 1, i + 1)][j]);
+        var fromJ = Math.max(0, j - explosionRadius);
+        var toJ = Math.min(bricks[0].length - 1, j + explosionRadius);
 
-        // j - 1
-        explodeBricks.push(bricks[i][Math.max(0, j - 1)])
-
-        // j + 1
-        explodeBricks.push(bricks[i][Math.min(bricks[0].length - 1, j + 1)])
-
-        explodeBricks.forEach(function(xBrick)
+        for(k = fromI; k <= toI; k++)
         {
-            if(xBrick.brickType != bricktypes.GOLD)
+            for(l = fromJ; l <= toJ; l++)
             {
-                xBrick.broken = true;
+                var xBrick = bricks[k][l];
+                if(xBrick.brickType != bricktypes.GOLD)
+                {
+                    xBrick.broken = true;
+                }
             }
-        });
+        }
 
         playAudio("explosion", 0.3);
     }
