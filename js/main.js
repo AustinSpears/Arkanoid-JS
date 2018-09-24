@@ -120,7 +120,7 @@ function gameOver()
 	playAudio("sounds/Game_Over.wav", 0.4);
 	
 	// Show the cursor and restart button
-	canvas.style.cursor = "default"
+	canvas.style.cursor = "url('images/CoinCursor.png'), auto";
 	document.getElementById("restartButton").style.visibility = "visible";
 }
 

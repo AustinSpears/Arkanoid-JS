@@ -12,7 +12,7 @@
     .gameCanvas{
       grid-column: 1;
       grid-row: 1;
-      cursor: default;
+      cursor: url('images/CoinCursor.png'), auto;
     }
     .restartButton {
       grid-column: 1;
@@ -20,8 +20,9 @@
       position: relative;
       background: black;
       color: white;
-      width: 200px;
-      font-size: 24px;
+      width:25px;
+      height:100px;
+      cursor: url('images/CoinCursor.png'), auto;
     }
   </style>
   <head>
@@ -32,7 +33,7 @@
     <h1>Bootleg Arkanoid</h1>
     <div class="gameDiv">
       <canvas class = "gameCanvas" id="canvas" width="800" height="600"></canvas>
-      <input class="restartButton" id="restartButton" type="button" value="Insert Coin"/>
+      <input class="restartButton" id="restartButton" type="button"/>
     </div>
 
     <script data-main="js/main" src="js/require.js"></script>
