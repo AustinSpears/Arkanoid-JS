@@ -151,8 +151,8 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
 
     function spawnPowerup(brick)
     {
-        // 1/5 chance to spawn a powerup
-        if(Math.floor(Math.random() * 5) > 0)
+        // 1/3 chance to spawn a powerup
+        if(Math.floor(Math.random() * 3) > 0)
             return;
 
         // Init the new powerup - todo: randomize this once there are more powerups
