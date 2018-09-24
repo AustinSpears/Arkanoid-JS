@@ -9,14 +9,28 @@
       align-items: center;
       justify-items: center;
     }
+    .coinSlotDiv{
+      display: grid;
+      grid-column: 1;
+      grid-row: 1;
+      align-items: center;
+      justify-items: center;
+    }
     .gameCanvas{
       grid-column: 1;
       grid-row: 1;
       cursor: url('images/CoinCursor.png'), auto;
     }
-    .restartButton {
+    .insertCoinP{
       grid-column: 1;
       grid-row: 1;
+      color: white;
+      position: relative;
+
+    }
+    .restartButton {
+      grid-column: 1;
+      grid-row: 2;
       position: relative;
       background: black;
       color: white;
@@ -32,8 +46,11 @@
   <body>
     <h1>Bootleg Arkanoid</h1>
     <div class="gameDiv">
-      <canvas class = "gameCanvas" id="canvas" width="800" height="600"></canvas>
-      <input class="restartButton" id="restartButton" type="button"/>
+      <canvas class ="gameCanvas" id="canvas" width="800" height="600"></canvas>
+      <div class="coinSlotDiv" id="insertCoinDiv">
+        <p class="insertCoinP">Insert Coin</p>
+        <input class="restartButton" id="restartButton" type="button"/>
+      </div>
     </div>
 
     <script data-main="js/main" src="js/require.js"></script>

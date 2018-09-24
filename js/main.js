@@ -70,7 +70,7 @@ function gameStart()
 
 	// Hide the cursor and restart button
 	canvas.style.cursor = "none";
-	document.getElementById("restartButton").style.visibility = "hidden";
+	document.getElementById("insertCoinDiv").style.visibility = "hidden";
 
 	// Reset the objects to their default state
 	objMngr.initAll();
@@ -121,7 +121,7 @@ function gameOver()
 	
 	// Show the cursor and restart button
 	canvas.style.cursor = "url('images/CoinCursor.png'), auto";
-	document.getElementById("restartButton").style.visibility = "visible";
+	document.getElementById("insertCoinDiv").style.visibility = "visible";
 }
 
 function musicRestart()
