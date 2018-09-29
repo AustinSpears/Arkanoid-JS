@@ -144,7 +144,7 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
                 ball.setFire();
             });
 
-            playAudio("sounds/Powerup_FireBall.flac", 0.3);
+            playAudio("sounds/Powerup_FireBall.flac", 0.2);
             break;
         }
     }
