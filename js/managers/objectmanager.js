@@ -81,7 +81,7 @@ function ObjectManager(ctx, canvas, mouse)
             for(var j = 0; j < arrayWidth; j++)
             {
                 this.bricks[j][i].broken = false;
-                this.bricks[j][i].c = rowColor(i);
+                this.bricks[j][i].c = rowColor(i + topRow + 1);
             }
         }
 
@@ -92,7 +92,8 @@ function ObjectManager(ctx, canvas, mouse)
         }
     }
 
-    var colorArray = ["DarkGreen", "ForestGreen", "DarkSeaGreen"];
+    // Gradient of green going from dark to light
+    var colorArray = ["#024017", "#024017", "#047F2D", "#047F2D", "#06BF44", "#06BF44"];
     function rowColor(index)
     {
         return colorArray[index%colorArray.length];
