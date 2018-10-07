@@ -60,3 +60,10 @@ https://creativecommons.org/publicdomain/zero/1.0/
 Game over - myfox14  
 https://freesound.org/people/myfox14/sounds/382310/  
 https://creativecommons.org/publicdomain/zero/1.0/
+
+
+#### Images:
+
+Coin Cursor - Riotz
+https://www.cursor.cc/?action=icon&file_id=45285  
+https://creativecommons.org/publicdomain/zero/1.0/
