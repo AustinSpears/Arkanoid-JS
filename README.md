@@ -2,7 +2,7 @@
 Developing this game as a way to learn the ins and outs of JavaScript
 
 
-Attributions
+3rd Party Attributions
 
 Music:
 
