@@ -1,4 +1,4 @@
-# HTML5-Arkanoid
+# ArkanoidJS
 Developing this game as a way to learn the ins and outs of JavaScript
 
 ---
