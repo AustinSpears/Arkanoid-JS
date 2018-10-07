@@ -64,6 +64,6 @@ https://creativecommons.org/publicdomain/zero/1.0/
 
 #### Images:
 
-Coin Cursor - Riotz
+Coin Cursor - Riotz  
 https://www.cursor.cc/?action=icon&file_id=45285  
 https://creativecommons.org/publicdomain/zero/1.0/
