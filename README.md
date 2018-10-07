@@ -1,5 +1,5 @@
 # ArkanoidJS
-Developing this game as a way to learn the ins and outs of JavaScript
+Developing this game as a way to learn the ins and outs of JavaScript.
 
 ---
 
