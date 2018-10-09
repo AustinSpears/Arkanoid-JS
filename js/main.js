@@ -14,6 +14,9 @@ Object.prototype.playAudio = function(fileName, volume) {
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
+// Trick to avoid line blurring
+ctx.translate(0.5, 0.5);
+
 // Get the animation frame
 var requestAnimFrame = 
         window.requestAnimationFrame ||
