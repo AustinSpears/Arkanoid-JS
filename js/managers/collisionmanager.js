@@ -51,10 +51,10 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
         var sampleBrick = bricks[0][0];
         var balli = Math.floor(ball.x / sampleBrick.w);
         var ballj = Math.floor(ball.y / sampleBrick.h);
-        var mini = Math.max(0, balli - 1);
-        var maxi = Math.min(bricks.length, balli + 1);
-        var minj = Math.max(0, ballj - 1);
-        var maxj = Math.min(bricks[0].length, ballj + 1);
+        var mini = Math.max(0, balli - 2);
+        var maxi = Math.min(bricks.length, balli + 2);
+        var minj = Math.max(0, ballj - 2);
+        var maxj = Math.min(bricks[0].length, ballj + 2);
 
         for(i = mini; i < maxi; i++)
         {
