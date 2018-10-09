@@ -104,11 +104,12 @@ function gameLoop()
 	delta = (currTime - lastTime);
 	if(delta > interval)
 	{
+		// Draw the static objects
+		drawManager.drawStatic();
+
+		// Increasing the iterations increases the game speed
 		for(var i = 0; i < 2; i++)
-		{
-			// Draw the static objects
-			drawManager.drawStatic();
-			
+		{	
 			// Move the objects
 			moveManager.moveAll();
 
@@ -121,10 +122,10 @@ function gameLoop()
 			
 			// Check for and handle collisions
 			collisionManager.collideAll();
-			
-			// Draw the non-static objects
-			drawManager.drawNonStatic();
 		}
+
+		// Draw the non-static objects
+		drawManager.drawNonStatic();
 
 		lastTime = currTime - (delta % interval);
 	}
