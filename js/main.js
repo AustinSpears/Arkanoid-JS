@@ -60,6 +60,11 @@ var collisionManager;
 
 // ======================== FUNCTIONS START ===================
 
+var interval = 1000 / 60;
+var lastTime;
+var currTime;
+var delta = 0;
+
 function gameStart()
 {  
 	// Stop the old game
@@ -78,7 +83,8 @@ function gameStart()
 	drawManager = new DrawManager(ctx, objMngr.bricks, objMngr.paddle, objMngr.balls, objMngr.fallingPowerups);
 	collisionManager = new CollisionManager(objMngr.bricks, objMngr.paddle, objMngr.balls, objMngr.walls, objMngr.fallingPowerups);
 
-    // Start frame loop
+	// Start frame loop
+	lastTime = Date.now();
 	gameFrameID = requestAnimFrame(gameLoop);
 	playAudio("sounds/Game_Start.ogg", 0.4);
 }
@@ -90,26 +96,36 @@ function gameLoop()
 	{
 		musicRestart();
 	}
-    
-	// Draw the static objects
-	drawManager.drawStatic();
-    
-    // Move the objects
-	moveManager.moveAll();
 
-	// All balls fell off the screen
-	if(objMngr.balls.length == 0)
+	currTime = Date.now();
+	delta = (currTime - lastTime);
+	if(delta > interval)
 	{
-		gameOver();
-		return;
+		for(var i = 0; i < 2; i++)
+		{
+			// Draw the static objects
+			drawManager.drawStatic();
+			
+			// Move the objects
+			moveManager.moveAll();
+
+			// All balls fell off the screen
+			if(objMngr.balls.length == 0)
+			{
+				gameOver();
+				return;
+			}
+			
+			// Check for and handle collisions
+			collisionManager.collideAll();
+			
+			// Draw the non-static objects
+			drawManager.drawNonStatic();
+		}
+
+		lastTime = currTime - (delta % interval);
 	}
     
-    // Check for and handle collisions
-	collisionManager.collideAll();
-	
-	// Draw the non-static objects
-	drawManager.drawNonStatic();
-        
     // Recursive Step
 	requestAnimFrame(gameLoop);
 }
