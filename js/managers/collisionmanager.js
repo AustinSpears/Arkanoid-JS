@@ -46,9 +46,19 @@ function CollisionManager(bricks, paddle, balls, walls, fallingPowerups)
         var closestDist = 99999;
         var closestBricki = 0;
         var closestBrickj = 0;
-        for(i = 0; i < bricks.length; i++)
+
+        // Determine the brick the ball is currently inside
+        var sampleBrick = bricks[0][0];
+        var balli = Math.floor(ball.x / sampleBrick.w);
+        var ballj = Math.floor(ball.y / sampleBrick.h);
+        var mini = Math.max(0, balli - 1);
+        var maxi = Math.min(bricks.length, balli + 1);
+        var minj = Math.max(0, ballj - 1);
+        var maxj = Math.min(bricks[0].length, ballj + 1);
+
+        for(i = mini; i < maxi; i++)
         {
-            for(j = 0; j < bricks[0].length; j++)
+            for(j = minj; j < maxj; j++)
             {
                 var currBrick = bricks[i][j];
 
