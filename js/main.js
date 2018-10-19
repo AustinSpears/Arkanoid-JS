@@ -72,7 +72,7 @@ function loadLevel(callback) {
 
 	var xobj = new XMLHttpRequest();
 		xobj.overrideMimeType("application/json");
-	xobj.open('GET', '../levels/Space Invader.json', true);
+	xobj.open('GET', 'https://austinspears.github.io/Arkanoid-JS/levels/Space Invader.json', true);
 	xobj.onreadystatechange = function () {
 		  if (xobj.readyState == 4 && xobj.status == "200") {
 			callback(JSON.parse(xobj.responseText));
