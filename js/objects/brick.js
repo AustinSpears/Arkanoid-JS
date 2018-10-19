@@ -4,33 +4,44 @@ const bricktypes = {
 	GOLD: 'gold'
 }
 
-function Brick(x, y, width, height)
+function Brick(x, y, width, height, broken, brickType, color)
 {
 	this.x = x;
 	this.y = y;
 	this.w = width;
 	this.h = height;
-	this.c = "green";
-	this.broken = true;
-	this.brickType = bricktypes.NORMAL;
+	this.c = color;
+	this.broken = broken;
+	this.brickType = brickType;
 	this.numHits = 0;
-	this.hitsToBreak = 1;
 
 	// Return center point
 	this.centerX = this.x + this.w / 2;
 	this.centerY = this.y + this.h / 2;
 
-	this.setSilver = function()
+	this.initTypeProperties = function()
 	{
-		this.c = "DarkGray";
-		this.hitsToBreak = 2;
-		this.brickType = bricktypes.SILVER;
+		switch(this.brickType)
+		{
+			case bricktypes.SILVER:
+			setSilver.call(this);
+			break;
+			case bricktypes.GOLD:
+			setGold.call(this);
+			break;
+		}
 	}
 
-	this.setGold = function()
+	function setSilver()
 	{
+		// todo - Gradient brush
+		this.c = "DarkGray";
+	}
+
+	function setGold()
+	{
+		// todo - Gradient brush
 		this.c = "gold";
-		this.brickType = bricktypes.GOLD;
 	}
 
 	this.draw = function(ctx)
@@ -143,7 +154,7 @@ function Brick(x, y, width, height)
 					return;
 				}
 				this.numHits++;
-				if(this.numHits >= this.hitsToBreak)
+				if(this.numHits >= 2)
 				{
 					this.broken = true;
 				}

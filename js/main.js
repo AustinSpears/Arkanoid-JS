@@ -42,7 +42,7 @@ function trackMouse(e)
 }
 
 // Hook up restart event
-document.getElementById("restartButton").onclick = gameStart;
+document.getElementById("restartButton").onclick = asyncLoad;
 
 // Start the music
 var gameMusic = new Audio("sounds/Music_Main.mp3");
@@ -63,12 +63,30 @@ var collisionManager;
 
 // ======================== FUNCTIONS START ===================
 
+function asyncLoad()
+{
+	loadLevel(gameStart.bind(this));
+}
+
+function loadLevel(callback) {   
+
+	var xobj = new XMLHttpRequest();
+		xobj.overrideMimeType("application/json");
+	xobj.open('GET', '../levels/Space Invader.json', true);
+	xobj.onreadystatechange = function () {
+		  if (xobj.readyState == 4 && xobj.status == "200") {
+			callback(JSON.parse(xobj.responseText));
+		  }
+	};
+	xobj.send(null);  
+ }
+
 var interval = 1000 / 60;
 var lastTime;
 var currTime;
 var delta = 0;
 
-function gameStart()
+function gameStart(levelArray)
 {  
 	// Stop the old game
 	if(gameFrameID != null)
@@ -81,7 +99,7 @@ function gameStart()
 	document.getElementById("insertCoinDiv").style.visibility = "hidden";
 
 	// Reset the objects to their default state
-	objMngr.initAll();
+	objMngr.initAll(levelArray);
 	moveManager = new MoveManager(objMngr.paddle, objMngr.balls, objMngr.fallingPowerups);
 	drawManager = new DrawManager(ctx, objMngr.bricks, objMngr.paddle, objMngr.balls, objMngr.fallingPowerups);
 	collisionManager = new CollisionManager(objMngr.bricks, objMngr.paddle, objMngr.balls, objMngr.walls, objMngr.fallingPowerups);

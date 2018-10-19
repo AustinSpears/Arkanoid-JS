@@ -11,11 +11,11 @@ function ObjectManager(ctx, canvas, mouse)
     this.fallingPowerups;
 
     // Public methods
-    this.initAll = function()
+    this.initAll = function(levelArray)
     {
         initPaddle.call(this);
         initWalls.call(this)
-        initBricks.call(this);
+        initBricks.call(this, levelArray);
         initBalls.call(this);
         initPowerups.call(this);
     }
@@ -36,7 +36,7 @@ function ObjectManager(ctx, canvas, mouse)
         // Clear the balls list
         this.balls = [];
         xPosition = canvas.width / 2 - defaultBallRadius;
-        yPosition = canvas.height / 2 - defaultBallRadius;
+        yPosition = canvas.height - 30;
         this.balls.push(new Ball(xPosition, yPosition, defaultBallRadius, ctx));
     }
 
@@ -48,72 +48,41 @@ function ObjectManager(ctx, canvas, mouse)
         this.walls = [leftWall, rightWall, topWall];
     }
 
-    function initBricks()
+    function initBricks(levelArray)
     {
-        // Create a 2d array the size of the canvas
-        // Canvas dimensions: 800x600
         this.bricks = [];
-        var brickHeight = 20;
-        
-        // Make board 10 bricks wide
-        var brickWidth = (canvas.width) / 10;
-        
-        var arrayHeight = (canvas.height) / brickHeight;
-        var arrayWidth = 10;
-        
-        // Create spots for the bricks
-        for(var i = 0; i < arrayWidth; i++)
-        {
-            this.bricks[i] = [];
-            for(var j = 0; j < arrayHeight; j++)
-            {
-                var x = i * brickWidth;
-                var y = j * brickHeight;
 
-                this.bricks[i][j] = new Brick(x, y, brickWidth, brickHeight);
-            }	
-        }
-        
-        var topRow = 2;
-        // Enable and color some of the bricks
-        for(var i = topRow; i < 9; i++)
+        for(var a = 0; a < 10; a++)
         {
-            for(var j = 0; j < arrayWidth; j++)
+            this.bricks[a] = [];
+        }
+
+        for(var i = 0; i < levelArray.length; i++)
+        {
+            var levelBrick = levelArray[i];
+            
+            var brickType;
+            switch(levelBrick.brickType)
             {
-                this.bricks[j][i].broken = false;
-                this.bricks[j][i].c = rowColor(i + topRow + 1);
+                case 0:
+                brickType = bricktypes.NORMAL;
+                break;
+
+                case 1:
+                brickType = bricktypes.SILVER;
+                break;
+
+                case 2:
+                brickType = bricktypes.GOLD;
+                break;
             }
-        }
 
-        // Make the top row into silver bricks
-        for(var i = 0; i < arrayWidth; i++)
-        {
-            this.bricks[i][topRow].setSilver();
-        }
-    }
+            var newBrick = new Brick(levelBrick.x, levelBrick.y, levelBrick.w, 
+                levelBrick.h, levelBrick.broken, brickType, levelBrick.c);
 
-    // Gradient of green going from dark to light
-    var colorArray = ["#024017", "#024017", "#047F2D", "#047F2D", "#06BF44", "#06BF44"];
-    function rowColor(index)
-    {
-        return colorArray[index%colorArray.length];
-    }
+            newBrick.initTypeProperties();
 
-    function randomColor()
-    {
-        var colorInt = Math.floor(Math.random() * 5);
-        switch(colorInt)
-        {
-            case 0:
-                return "DarkGreen";
-            case 1:
-                return "ForestGreen"
-            case 2:
-                return "SaddleBrown"
-            case 3:
-                return "DarkSeaGreen"
-            case 4:
-                return "Peru"
+            this.bricks[levelBrick.x / levelBrick.w][levelBrick.y / levelBrick.h] = newBrick;
         }
     }
 }
