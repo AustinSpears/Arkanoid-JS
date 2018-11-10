@@ -42,7 +42,8 @@ function trackMouse(e)
 }
 
 // Hook up restart event
-document.getElementById("restartButton").onclick = asyncLoad;
+document.getElementById("restartButton").onclick = function() { 
+	levelClick("Space Invader"); }
 
 // Start the music
 var gameMusic = new Audio("sounds/Music_Main.mp3");
@@ -61,18 +62,40 @@ var moveManager;
 var drawManager;
 var collisionManager;
 
+// Create the level buttons
+var levels = ["Space Invader", "Thread The Needle"];
+createLevelLinks();
+
 // ======================== FUNCTIONS START ===================
 
-function asyncLoad()
+function createLevelLinks()
 {
-	loadLevel(gameStart.bind(this));
+	var levelDiv = document.getElementById('levelLinkDiv');
+	levels.forEach(level => {
+		var levLink = document.createElement('button');
+		levLink.onclick = function() {
+			levelClick(level);
+		}
+		levLink.innerHTML = level;
+		levLink.style.display = "inline-block";
+		levelDiv.appendChild(levLink);
+	});
 }
 
-function loadLevel(callback) {   
+function levelClick(levName)
+{
+	// Set the restartButton to the proper level
+	document.getElementById("restartButton").onclick = function() {
+		levelClick(levName); }
+
+	loadLevel(gameStart.bind(this), levName);
+}
+
+function loadLevel(callback, levName) {   
 
 	var xobj = new XMLHttpRequest();
 		xobj.overrideMimeType("application/json");
-	xobj.open('GET', 'https://austinspears.github.io/Arkanoid-JS/levels/Space Invader.json', true);
+	xobj.open('GET', 'https://austinspears.github.io/Arkanoid-JS/levels/'.concat(levName, '.json'), true);
 	xobj.onreadystatechange = function () {
 		  if (xobj.readyState == 4 && xobj.status == "200") {
 			callback(JSON.parse(xobj.responseText));

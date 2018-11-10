@@ -4,11 +4,18 @@
     h1 {
       color: white;
     }
+    .levelLinkDiv {
+      margin: auto;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      white-space: nowrap;
+      margin-top: 80px;
+      width: 816px;
+    }
     .gameDiv{
       display: grid;
       align-items: center;
       justify-items: center;
-      margin-top: 80px;
     }
     .coinSlotDiv{
       display: grid;
@@ -45,6 +52,8 @@
     <link  rel="stylesheet" href="css/main.css">
   </head>
   <body>
+
+    <div id="levelLinkDiv" class="levelLinkDiv"></div>
     <div class="gameDiv">
       <canvas class ="gameCanvas" id="canvas" width="800" height="600"></canvas>
       <div class="coinSlotDiv" id="insertCoinDiv">
