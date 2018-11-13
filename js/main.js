@@ -63,7 +63,7 @@ var drawManager;
 var collisionManager;
 
 // Create the level buttons
-var levels = ["Space Invader", "Red vs Blue", "Thread The Needle", "Xmas", "Pokeball"];
+var levels = ["Space Invader","Pray For Triple Ball","Chambers","Red vs Blue","Thread The Needle","Blue Random","Thalassophobia","Xmas","Pokeball","Hmm"];
 createLevelLinks();
 
 // ======================== FUNCTIONS START ===================
